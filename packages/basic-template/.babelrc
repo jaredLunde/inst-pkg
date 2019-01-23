@@ -1,0 +1,21 @@
+{
+  "env": {
+    "cjs": {
+      "presets": [
+        ["@jaredlunde/esx", {
+          "runtime": false
+        }]
+      ]
+    },
+    "es": {
+      "presets": [
+        ["@jaredlunde/esx", {
+          "env": {
+            "modules": false
+          },
+          "runtime": false
+        }]
+      ]
+    }
+  }
+}

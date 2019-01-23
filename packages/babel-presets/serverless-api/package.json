@@ -1,0 +1,27 @@
+{
+  "name": "@inst-app/serverless-api",
+  "version": "1.0.3",
+  "license": "MIT",
+  "devDependencies": {
+    "@inst-app/create-preset": "^1.0.3",
+    "rimraf": "^2.6.2"
+  },
+  "scripts": {
+    "build": "node ./create-package.js",
+    "clean": "rimraf yarn.lock && rimraf ./node_modules"
+  },
+  "dependencies": {
+    "@inst-app/babel-preset-inst": "^1.0.5",
+    "@inst-app/cli": "^1.0.1-beta.23",
+    "@inst-app/webpack": "^1.0.1",
+    "serverless": "^1.36.1",
+    "serverless-apigw-binary": "^0.4.4",
+    "serverless-content-encoding": "^1.1.0",
+    "serverless-domain-manager": "^2.6.10",
+    "serverless-dotenv-plugin": "^2.0.1",
+    "serverless-http": "^1.8.0",
+    "serverless-offline": "^3.31.3",
+    "serverless-plugin-lambda-warmup": "^1.0.1",
+    "serverless-webpack": "^5.2.0"
+  }
+}

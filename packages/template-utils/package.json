@@ -1,0 +1,23 @@
+{
+  "name": "@inst-app/template-utils",
+  "version": "1.0.3",
+  "main": "dist/cjs/index.js",
+  "scripts": {
+    "clean": "rimraf ./dist/cjs",
+    "build": "yarn clean && cross-env NODE_ENV=production BABEL_ENV=production babel src --out-dir dist/cjs && npm run prettier \"dist/cjs/**/*.js\"",
+    "prettier": "prettier --single-quote --no-semi --no-bracket-spacing --trailing-comma es5 --write"
+  },
+  "repository": "https://github.com/jaredLunde/inst",
+  "author": "Jared Lunde",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@inst-app/babel-preset-esx": "^1.0.2",
+    "prettier": "^1.14.2"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs2": "^7.2.0",
+    "chalk": "^2.4.1",
+    "find-package-json": "^1.1.0"
+  }
+}

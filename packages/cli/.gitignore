@@ -1,0 +1,7 @@
+.git
+.DS_Store
+node_modules
+yarn-error.log
+dist
+foo
+example-template

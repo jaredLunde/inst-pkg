@@ -1,0 +1,21 @@
+{
+  "name": "inst-monorepo",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaredLunde/inst"
+  },
+  "author": "Jared Lunde",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jaredLunde/inst/issues"
+  },
+  "private": true,
+  "workspaces": [
+    "packages/basic-template",
+    "packages/template-utils"
+  ],
+  "scripts": {
+    "edit": "atom ./"
+  }
+}
