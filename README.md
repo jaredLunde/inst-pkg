@@ -6,7 +6,7 @@ using a basic template engine and integrated CLI prompts.
 `yarn global add @inst-pkg/cli`
 
 --------------------------------------------------------------------------------
-```
+```sh
 # Creates a new boilerplate in the current working directory
 inst template @stellar-apps/serverless-react-app
 
