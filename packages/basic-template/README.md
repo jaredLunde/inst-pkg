@@ -5,14 +5,14 @@ the box
 
 
 ```js
-let t = compile('hello, {% name %} {? sayMyLastName ?}{% lastName %}{??}')
+let t = compile('hello, <:name:> {? sayMyLastName ?}<:lastName:>{??}')
 t({name: 'jared', lastName: 'lunde'})
 t({name: 'jared', lastName: 'lunde', sayMyLastName: true})
 
 let t = compile(`
-  hello, {% name %}
+  hello, <:name:>
   {? sayMyLastName > 1 ?}
-    {% lastName %}
+    <:lastName:>
   {??}
 `)
 t({name: 'jared', lastName: 'lunde', sayMyLastName: 0})

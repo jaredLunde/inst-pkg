@@ -2,7 +2,7 @@ import template from '@inst-pkg/basic-template'
 
 
 const opt = {
-  prop: /<:([\sA-Z0-9_]+?):>/g
+  prop: /<:([\sa-zA-Z0-9_.]+?):>/g
 }
 
 export default function render (source, data) {
