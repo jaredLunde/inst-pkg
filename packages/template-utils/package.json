@@ -1,6 +1,6 @@
 {
-  "name": "@inst-app/template-utils",
-  "version": "1.0.4",
+  "name": "@inst-pkg/template-utils",
+  "version": "1.0.1",
   "main": "dist/cjs/index.js",
   "scripts": {
     "clean": "rimraf ./dist/cjs",
@@ -16,7 +16,6 @@
     "prettier": "^1.14.2"
   },
   "dependencies": {
-    "@babel/runtime-corejs2": "^7.2.0",
     "chalk": "^2.4.1",
     "find-package-json": "^1.1.0"
   }
