@@ -11,10 +11,6 @@
     "url": "https://github.com/jaredLunde/inst/issues"
   },
   "private": true,
-  "workspaces": [
-    "packages/basic-template",
-    "packages/template-utils"
-  ],
   "scripts": {
     "edit": "atom ./"
   }

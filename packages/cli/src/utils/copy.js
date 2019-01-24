@@ -1,4 +1,4 @@
-import {flag, log} from '@inst-app/template-utils'
+import {flag, log} from '@inst-pkg/template-utils'
 import fs from 'fs-extra'
 import ncp from 'ncp'
 import path from 'path'

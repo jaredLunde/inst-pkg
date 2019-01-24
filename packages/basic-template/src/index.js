@@ -2,11 +2,13 @@
 A very stripped down version of doT by Laura Doktorova
 - https://github.com/olado/doT
 
-<: HELLO :>
+<:HELLO:>
 
-<: if SOME_CONDITIONAL_PROP :>
+<:if SOME_CONDITIONAL_PROP:>
   prints this text if SOME_CONDITIONAL_PROP is truthy
-<: fi :>
+<:fi:>
+
+<:(value+='foo'):>
 */
 const skip = /$^/
 export const ARGNAME = 'props'
@@ -17,7 +19,6 @@ const spaceRe = /[\r\t\n\s]/g
 function unescape(code) {
   return code.replace(unescapeRe, '$1').replace(spaceRe, ' ')
 }
-
 
 // TODO: escape cmp quotes
 function transformConditional (m, elseCase, code) {
@@ -44,16 +45,13 @@ function transformConditional (m, elseCase, code) {
   }
 }
 
-
 function transformProp (m, prop) {
   return `'+(${ARGNAME}.${unescape(prop)} || '');value+='`
 }
 
-
 function injectScript (m, code) {
   return `';${unescape(code)};value+='`
 }
-
 
 const defaultOptions = {
   prop: /<:([\s\w\.]+?):>/g,
@@ -94,6 +92,5 @@ function compile (string, options) {
       .replace(r6, '')
   )
 }
-
 
 export default compile

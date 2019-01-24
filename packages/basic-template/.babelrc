@@ -1,21 +1,14 @@
 {
-  "env": {
-    "cjs": {
-      "presets": [
-        ["@jaredlunde/esx", {
-          "runtime": false
-        }]
-      ]
-    },
-    "es": {
-      "presets": [
-        ["@jaredlunde/esx", {
-          "env": {
-            "modules": false
-          },
-          "runtime": false
-        }]
-      ]
-    }
-  }
+  "presets": [
+    [
+      "@inst-app/esx", {
+        "env": {
+          "targets": {
+            "node": "10"
+          }
+        },
+        "runtime": false
+      }
+    ]
+  ]
 }

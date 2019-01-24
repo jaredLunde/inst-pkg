@@ -10,11 +10,13 @@ import {
   cmd,
   pwd,
   log,
+  error,
   flag,
   line,
+  success,
   getPkgJson,
   getRootPkgJson
-} from '@inst-app/template-utils'
+} from '@inst-pkg/template-utils'
 import {
   addWorkspace,
   removeWorkspaceSync,
@@ -50,7 +52,7 @@ function handleExit (pkgDir) {
     EXITING = true
     console.log('\n', ...args)
     clean()
-    log(flag('Error', 'red'), 'inst failed to install your template')
+    error('inst failed to install your template')
     process.exit(1)
   }
 
@@ -63,7 +65,7 @@ function handleExit (pkgDir) {
     clean()
 
     if (code != 0) {
-      log(flag('Error', 'red'), 'inst failed to install your template')
+      error('inst failed to install your template')
     }
     else {
       log(flag('See ya'))
@@ -84,7 +86,7 @@ function handleExit (pkgDir) {
 }
 
 export default async function add ({name, template, cwd, ...args}) {
-  if (name && !template) {
+  if (!template) {
     template = name
     name = void 0
   }
@@ -118,7 +120,7 @@ export default async function add ({name, template, cwd, ...args}) {
   // make directory if it doesn't exist, otherwise exit
   if (fs.existsSync(variables.PKG_DIR)) {
     FINISHED = true
-    log(flag('Error', 'red'), 'package already exists', flag(variables.PKG_DIR))
+    error('package already exists', flag(variables.PKG_DIR))
     return
   }
   await mkdir(variables.PKG_DIR)
@@ -151,7 +153,7 @@ export default async function add ({name, template, cwd, ...args}) {
   // imports the template module
   const templateName = findTemplateName(variables.PKG_DIR, template)
   const templatePath = findTemplatePath(variables.PKG_DIR, template)
-  log(`Importing template ${flag(templateName)} from ${flag(templatePath)}`)
+  // log(`Importing template ${flag(templateName)} from ${flag(templatePath)}`)
   // const templatePkg = require(templatePath)
   const templatePkg = importFrom(variables.PKG_DIR, templateName)
 
@@ -224,8 +226,8 @@ export default async function add ({name, template, cwd, ...args}) {
 
   // installs the template package dependencies
   await installDeps(variables.PKG_DIR, templatePkg)
-  console.log(
-    flag('⚘', 'green'),
+  // donezo
+  success(
     flag(variables.PKG_NAME),
     'was created at',
     flag(path.relative(process.cwd(), variables.PKG_DIR))

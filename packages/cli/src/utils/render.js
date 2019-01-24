@@ -1,4 +1,4 @@
-import template from '@inst-app/basic-template'
+import template from '@inst-pkg/basic-template'
 
 
 const opt = {

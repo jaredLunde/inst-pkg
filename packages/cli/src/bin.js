@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import yargs from 'yargs'
-import {log, flag} from '@inst-app/template-utils'
+import {log, flag} from '@inst-pkg/template-utils'
 import {version} from '../../package.json'
 import * as docs from './docs'
 import init from './init'
@@ -29,9 +29,15 @@ export default async function bin () {
   )
 
   yargs.command(
-    'add [name] [template] [--cwd directory]',
+    'add [template] [name] [--cwd directory]',
     docs.init,
     yargs => {
+      yargs.positional(
+        'template', {
+          describe: 'The NPM package, git repo, or local template to create a workspace from'
+        }
+      )
+
       yargs.positional(
         'name', {
           describe: 'The name of the new package in your workspace'

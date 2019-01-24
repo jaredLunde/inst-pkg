@@ -1,20 +1,14 @@
 {
-  "env": {
-    "production": {
-      "presets": [
-        [
-          "@inst-app/esx", {
-            "env": {
-              "targets": {
-                "node": "10"
-              }
-            },
-            "runtime": {
-              "corejs": 2
-            }
-          }
-        ]
-      ]
+  "presets": [
+    [
+      "@inst-app/esx", {
+      "env": {
+        "targets": {
+          "node": "10"
+        }
+      },
+      "runtime": false
     }
-  }
+    ]
+  ]
 }

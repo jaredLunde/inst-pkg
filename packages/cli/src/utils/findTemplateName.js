@@ -1,5 +1,5 @@
 import memoize from 'memoize-two-args'
-import {getPkgJson, getRootPkgFilename} from '@inst-app/template-utils'
+import {getPkgJson, getRootPkgFilename} from '@inst-pkg/template-utils'
 import * as lockfile from '@yarnpkg/lockfile'
 import fs from "fs"
 

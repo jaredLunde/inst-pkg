@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
+ # Creates a new Yarn monorepo
 inst init
-inst init {{NAME}}
+inst init [workspace-name]
 
-inst create-shared
-inst create-shared --static
+ # Creates a template
+inst template [template-name]
 
-inst create-pwa
-inst create-pwa --static
+ # Creates a new workspace from a provided template
+inst add @stellar-apps/serverless-react-app serverless-react-app
 
-inst create-api
-**/
+ **/
 import bin from './bin'
 bin()

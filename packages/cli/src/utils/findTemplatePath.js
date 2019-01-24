@@ -1,7 +1,7 @@
 import memoize from 'memoize-two-args'
 import path from "path"
 import fs from "fs"
-import {getRootPkgFilename} from '@inst-app/template-utils'
+import {getRootPkgFilename} from '@inst-pkg/template-utils'
 import findTemplateName from './findTemplateName'
 
 

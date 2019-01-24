@@ -1,5 +1,5 @@
 {
-  "name": "@inst-app/next-cli",
+  "name": "@inst-pkg/cli",
   "version": "2.0.0-beta",
   "description": "Instantly create web and native applications for React with Serverless SSR out of the box",
   "main": "cjs/index.js",
@@ -22,13 +22,10 @@
     "prettier": "^1.14.2"
   },
   "dependencies": {
-    "@babel/runtime-corejs2": "^7.2.0",
-    "@inst-app/basic-template": "^1.0.0",
-    "@inst-app/template-utils": "^1.0.3",
+    "@inst-pkg/basic-template": "^1.0.0",
+    "@inst-pkg/template-utils": "^1.0.1",
     "@yarnpkg/lockfile": "^1.1.0",
     "chalk": "^2.4.1",
-    "cross-env": "^5.2.0",
-    "find-package-json": "^1.1.0",
     "fs-extra": "^7.0.0",
     "import-from": "^2.1.0",
     "inquirer": "^6.1.0",

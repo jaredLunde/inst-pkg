@@ -1,5 +1,5 @@
 {
-  "name": "@inst-app/basic-template",
+  "name": "@inst-pkg/basic-template",
   "version": "1.0.0",
   "description": "A basic configurable template engine with conditionals and variable replacement.",
   "main": "dist/cjs/index.js",

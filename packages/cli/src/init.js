@@ -1,6 +1,15 @@
 import path from 'path'
 import inquirer from 'inquirer'
-import {trim, required, pwd, cmd, getPkgJson, getPkgFilename} from '@inst-app/template-utils'
+import {
+  trim,
+  required,
+  pwd,
+  cmd,
+  success,
+  getPkgJson,
+  getPkgFilename,
+  flag,
+} from '@inst-pkg/template-utils'
 import {promptDefaults, mkdir, writeFile} from './utils'
 
 
@@ -58,4 +67,6 @@ export default async function init ({projectName}) {
   await writeFile(path.join(pkgDir, '.gitignore'), defaultGitIgnore)
   // creates the packages folder for the workspace
   await mkdir(path.join(pkgDir, 'packages'))
+  // donezo
+  success(flag(variables.NAME), 'workspace was created at', flag(pkgDir))
 }

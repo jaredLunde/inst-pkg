@@ -734,7 +734,7 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@inst-app/babel-preset-esx@^1.0.0":
+"@inst-app/babel-preset-esx@^1.0.2":
   version "1.0.15"
   resolved "https://registry.yarnpkg.com/@inst-app/babel-preset-esx/-/babel-preset-esx-1.0.15.tgz#0dc0c4e19096a5ffd1f610474725e0be2869e4f4"
   integrity sha512-TQ+srUmK+2BK7RP4mS8Y2Q9SZLxFKlYLxLc4uP4JHgDIOgwsH16gsoXi4+ibBzrruskzjAAUQ+ig73dNJbFAhw==
@@ -961,7 +961,7 @@ caniuse-lite@^1.0.30000929:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000930.tgz#c238bab82bedb462bcbdc61d0334932dcc084d8a"
   integrity sha512-KD+pw9DderBLB8CGqBzYyFWpnrPVOEjsjargU/CvkNyg60od3cxSPTcTeMPhxJhDbkQPWvOz5BAyBzNl/St9vg==
 
-chalk@^2.0.0:
+chalk@^2.0.0, chalk@^2.4.1:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
@@ -1281,6 +1281,11 @@ fill-range@^4.0.0:
     is-number "^3.0.0"
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
+
+find-package-json@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/find-package-json/-/find-package-json-1.1.0.tgz#269b0c148bbe389f027e2c1e0c72fa108eadb348"
+  integrity sha512-ldihxiIFpewACALK0tUByf3GmOaTBjI5OcvwJ3mExgERUZBsSOBV8QM6vVb0/ZqylpzY6Od6SsP8bjFv7fKiTw==
 
 find-up@^2.1.0:
   version "2.1.0"
