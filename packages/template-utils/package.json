@@ -1,6 +1,6 @@
 {
   "name": "@inst-app/template-utils",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/cjs/index.js",
   "scripts": {
     "clean": "rimraf ./dist/cjs",
