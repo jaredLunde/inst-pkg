@@ -1,6 +1,6 @@
 {
   "name": "@inst-pkg/cli",
-  "version": "2.0.0-beta",
+  "version": "1.0.0-beta",
   "description": "Instantly create web and native applications for React with Serverless SSR out of the box",
   "main": "cjs/index.js",
   "bin": {
