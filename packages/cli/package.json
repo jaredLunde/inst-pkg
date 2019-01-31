@@ -1,10 +1,10 @@
 {
   "name": "@inst-pkg/cli",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta.7",
   "description": "Instantly create web and native applications for React with Serverless SSR out of the box",
-  "main": "cjs/index.js",
+  "main": "dist/cjs/index.js",
   "bin": {
-    "inst": "cjs/index.js"
+    "inst": "dist/cjs/index.js"
   },
   "scripts": {
     "edit": "atom ./",

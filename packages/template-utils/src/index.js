@@ -1,6 +1,7 @@
 import chalk from 'chalk'
 import findPkgJSON from 'find-package-json'
 
+export * from './prompts'
 export cmd from './cmd'
 export const pwd = () => process.env.PWD || process.cwd()
 export const trim = s => s.trim()

@@ -38,7 +38,7 @@ function handleExit (pkgDir) {
   let EXITING = false
 
   function clean () {
-    const spinner = ora('Cleaning up').start()
+    const spinner = ora({spinner: 'point'}).start('Cleaning up')
     rimraf.sync(pkgDir)
     removeWorkspaceSync(pkgDir)
     spinner.succeed(flag('Cleaned up'))
@@ -92,8 +92,13 @@ export default async function add ({name, template, cwd, ...args}) {
   }
 
   // inits the variables object which will be passed to the template installer
-  const rootPkgJson = getRootPkgJson(cwd ? path.join(pwd(), cwd) : pwd())
-  let variables = {PKG_NAME: name, ROOT_NAME: rootPkgJson.name}
+  const PWD = cwd ? path.join(pwd(), cwd) : pwd()
+  const rootPkgJson = getRootPkgJson(PWD)
+  let variables = {
+    PKG_NAME: name,
+    ROOT_NAME: rootPkgJson.name,
+    ROOT_DIR: path.dirname(rootPkgJson.__path)
+  }
 
   // if there wasn't a name provided, prompt for one
   if (name === void 0) {
@@ -115,7 +120,7 @@ export default async function add ({name, template, cwd, ...args}) {
 
   // helps spot early errors in CLI configs
   log(`Creating new workspace package ${flag(variables.PKG_NAME)} using template ${flag(template)}`)
-  variables.PKG_DIR = path.join(cwd ? path.join(pwd(), cwd) : pwd(), variables.PKG_NAME)
+  variables.PKG_DIR = path.join(PWD, variables.PKG_NAME)
 
   // make directory if it doesn't exist, otherwise exit
   if (fs.existsSync(variables.PKG_DIR)) {
@@ -137,7 +142,7 @@ export default async function add ({name, template, cwd, ...args}) {
   }
 
   // installs the template
-  let spinner = ora(`Installing template ${flag(template)}`).start()
+  let spinner = ora({spinner: 'point'}).start(`Installing template ${flag(template)}`)
   await cmd.get(`
     cd ${variables.PKG_DIR}
     yarn init -y
@@ -171,7 +176,7 @@ export default async function add ({name, template, cwd, ...args}) {
 
     const prompts = (
       typeof templatePkg.prompts === 'function'
-        ? templatePkg.prompts(variables, pkgJson, args)
+        ? templatePkg.prompts(variables, pkgJson, args, inquirer)
         : templatePkg.prompts
     ).map(
       p => ({...promptDefaults, ...p})
@@ -184,7 +189,7 @@ export default async function add ({name, template, cwd, ...args}) {
   log(flag('Template variables'), `\n${JSON.stringify(variables, null, 2)}`)
 
   // copies the template to the package directory and renders it
-  spinner = ora(`Rendering templates for ${flag(templateName)}`).start()
+  spinner.start(`Rendering templates for ${flag(templateName)}`)
   await copy(
     path.join(templatePath, 'lib'),
     variables.PKG_DIR,
@@ -197,7 +202,7 @@ export default async function add ({name, template, cwd, ...args}) {
   spinner.succeed(flag('Rendered templates'))
 
   // renames files if there is a rename function in the template
-  spinner = ora(`Renaming files in ${flag(variables.PKG_DIR)}`).start()
+  spinner.start(`Renaming files in ${flag(variables.PKG_DIR)}`)
   if (templatePkg.rename) {
     await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables))
   }

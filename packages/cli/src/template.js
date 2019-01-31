@@ -37,8 +37,10 @@ module.exports = {}
 // creates template variables using Inquirer.js
 // see https://github.com/SBoudrias/Inquirer.js#objects for prompt object examples
 module.exports.prompts = (
-  {PKG_TPL_NAME, TPL_DIR}, /*default template variables*/ 
-  packageJson          /*contents of the package.json file as a plain object*/
+  {ROOT_NAME, ROOT_DIR, PKG_NAME, PKG_DIR}, // default template variables 
+  packageJson,                              // contents of the package.json file as a plain object
+  args,                                     // the arguments passed to the CLI
+  inquirer                                  // the inquirer prompt object
 ) => ([
   // See https://github.com/SBoudrias/Inquirer.js#objects
   // for valid prompts
@@ -92,7 +94,7 @@ function handleExit (tplDir) {
   let EXITING = false
 
   function clean () {
-    const spinner = ora('Cleaning up').start()
+    const spinner = ora({spinner: 'point'}).start('Cleaning up')
     rimraf.sync(tplDir)
     spinner.succeed(flag('Cleaned up'))
   }
@@ -169,7 +171,7 @@ export default async function template ({templateName}) {
   // starts handling bad exit codes
   handleExit(variables.TPL_DIR)
   // installs template utils
-  const spinner = ora(`${flag('Installing dependencies')}`).start()
+  const spinner = ora({spinner: 'point'}).start(`${flag('Installing dependencies')}`)
   await cmd.get(`
     cd ${variables.TPL_DIR}
     yarn init -y

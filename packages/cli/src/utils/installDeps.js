@@ -10,7 +10,7 @@ export default async function installDeps (
   pkgDir,
   {dependencies, devDependencies, peerDependencies}
 ) {
-  const spinner = ora(`${flag('Installing dependencies')} ${pkgDir}`).start()
+  const spinner = ora({spinner: 'point'}).start(`${flag('Installing dependencies')} ${pkgDir}`)
   let data
 
   try {
