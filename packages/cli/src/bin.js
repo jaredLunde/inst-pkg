@@ -30,7 +30,7 @@ export default async function bin () {
 
   yargs.command(
     'add [template] [name] [--cwd directory]',
-    docs.init,
+    docs.add,
     yargs => {
       yargs.positional(
         'template', {
@@ -54,7 +54,7 @@ export default async function bin () {
 
   yargs.command(
     'template [template-name] [--cwd directory]',
-    docs.init,
+    docs.template,
     yargs => {
       yargs.positional(
         'template-name', {

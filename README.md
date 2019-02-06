@@ -41,7 +41,7 @@ yarn inst https://github.com/jaredLunde/cool-github-inst-template
 - `name`
     - The name of the new package in your workspace. If not provided you will be prompted 
       for a name.
-- `cwd`
+- `--cwd`
     - Joins the process.cwd() to this path when creating the environment
     
 ----
@@ -52,6 +52,6 @@ can then be installed via `inst add` above.
 
 - `template-name`
     - The name of the new template you're creating
-- `cwd`
+- `--cwd`
     - Joins the process.cwd() to this path when creating the environment
     
