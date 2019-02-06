@@ -190,6 +190,13 @@ export default async function add ({name, template, cwd, ...args}) {
 
   // copies the template to the package directory and renders it
   spinner.start(`Rendering templates for ${flag(templateName)}`)
+
+  // if the package has its own copy function use that first
+  if (templatePkg.copy) {
+    await templatePkg.copy(variables, args)
+  }
+
+  // copy the package's lib to the package directory
   await copy(
     path.join(templatePath, 'lib'),
     variables.PKG_DIR,
