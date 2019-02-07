@@ -1,6 +1,6 @@
 {
   "name": "@inst-pkg/template-utils",
-  "version": "1.0.5",
+  "version": "1.0.10",
   "main": "dist/cjs/index.js",
   "scripts": {
     "clean": "rimraf ./dist/cjs",
@@ -20,7 +20,7 @@
     "find-package-json": "^1.1.0",
     "fuzzy": "^0.1.3",
     "ini": "^1.3.5",
-    "inquirer-autocomplete-prompt": "^1.0.1",
+    "inquirer-autocomplete": "^0.12.2",
     "inquirer-checkbox-plus-prompt": "^1.0.1"
   }
 }

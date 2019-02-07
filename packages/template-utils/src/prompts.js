@@ -1,4 +1,4 @@
-import autocompletePrompt from 'inquirer-autocomplete-prompt'
+import autocompletePrompt from 'inquirer-autocomplete'
 import ini from 'ini'
 import fuzzy from 'fuzzy'
 import fs from 'fs'
@@ -6,8 +6,10 @@ import fs from 'fs'
 
 export function autocompleteIni (inquirer, filename, opt) {
   inquirer.registerPrompt('autocomplete', autocompletePrompt)
+
   const file = fs.existsSync(filename) &&
     ini.parse(fs.readFileSync(filename, 'utf-8'))
+
   return {
     type: 'autocomplete',
     ...opt,
