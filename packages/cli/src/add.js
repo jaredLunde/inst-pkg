@@ -96,8 +96,8 @@ export default async function add ({name, template, cwd, ...args}) {
   const rootPkgJson = getRootPkgJson(PWD)
   let variables = {
     PKG_NAME: name,
-    ROOT_NAME: rootPkgJson.name,
-    ROOT_DIR: path.dirname(rootPkgJson.__path)
+    ROOT_NAME: rootPkgJson ? name : null,
+    ROOT_DIR: rootPkgJson ? path.dirname(rootPkgJson.__path) : null
   }
 
   // if there wasn't a name provided, prompt for one
@@ -134,11 +134,13 @@ export default async function add ({name, template, cwd, ...args}) {
   handleExit(variables.PKG_DIR)
 
   // creates the workspace package and installs the template
-  const ws = await addWorkspace(variables.PKG_DIR)
-  // exits gracefully if workspace already exists
-  if (ws === false) {
-    FINISHED = true
-    return
+  if (rootPkgJson) {
+    const ws = await addWorkspace(variables.PKG_DIR)
+    // exits gracefully if workspace already exists
+    if (ws === false) {
+      FINISHED = true
+      return
+    }
   }
 
   // installs the template
@@ -238,6 +240,10 @@ export default async function add ({name, template, cwd, ...args}) {
 
   // installs the template package dependencies
   await installDeps(variables.PKG_DIR, templatePkg)
+  await cmd.get(`
+     cd ${variables.PKG_DIR}
+     yarn remove ${templateName}
+  `)
   // donezo
   success(
     flag(variables.PKG_NAME),

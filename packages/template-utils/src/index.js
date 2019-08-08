@@ -25,8 +25,8 @@ export function getRootPkg (dir = pwd()) {
   }
 }
 
-export const getRootPkgJson = () => getRootPkg().value
-export const getRootPkgFilename = () => getRootPkg().filename
+export const getRootPkgJson = () => getRootPkg()?.value
+export const getRootPkgFilename = () => getRootPkg()?.filename
 
 export const getPkg = (dir = pwd()) => findPkgJSON(dir).next()
 export const getPkgJson = dir => getPkg(dir).value

@@ -6,11 +6,11 @@ import fs from "fs"
 
 export default memoize((pkgDir, templateName) => {
   let pkgName = templateName
-  const rootPkgFilename = getRootPkgFilename(pkgDir)
 
   if (templateName.match(/^https?:/)) {
     // git
     // has to be found via the lockfile
+    const rootPkgFilename = getRootPkgFilename(pkgDir)
     const lockfileName = rootPkgFilename.replace(/package\.json$/, 'yarn.lock')
     const lock = lockfile.parse(fs.readFileSync(lockfileName, 'utf8'))
 
