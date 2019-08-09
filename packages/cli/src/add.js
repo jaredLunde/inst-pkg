@@ -119,7 +119,7 @@ export default async function add ({name, template, cwd, ...args}) {
   }
 
   // helps spot early errors in CLI configs
-  log(`Creating new workspace package ${flag(variables.PKG_NAME)} using template ${flag(template)}`)
+  log(`Creating new${variables.ROOT_NAME ? ' workspace' : ''} package ${flag(variables.PKG_NAME)} using template ${flag(template)}`)
   variables.PKG_DIR = path.join(PWD, variables.PKG_NAME)
 
   // make directory if it doesn't exist, otherwise exit
@@ -237,7 +237,16 @@ export default async function add ({name, template, cwd, ...args}) {
       JSON.stringify(pkgJson, null, 2)
     )
   }
-
+  // initiates a git repo if not a workspace
+  if (!rootPkgJson) {
+    // we do git first beccause some deps may depend on it
+    await cmd.get(`
+      cd ${variables.PKG_DIR}
+      git init
+      git add .
+      git commit -m "Installed package template: \"${templateName}\""
+    `)
+  }
   // installs the template package dependencies
   await installDeps(variables.PKG_DIR, templatePkg)
   await cmd.get(`

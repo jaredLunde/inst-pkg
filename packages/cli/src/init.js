@@ -67,6 +67,13 @@ export default async function init ({projectName}) {
   await writeFile(path.join(pkgDir, '.gitignore'), defaultGitIgnore)
   // creates the packages folder for the workspace
   await mkdir(path.join(pkgDir, 'packages'))
+  // inits a git repository
+  await cmd.get(`
+    cd ${pkgDir}
+    git init
+    git add .
+    git commit -m "Created workspace"
+  `)
   // donezo
   success(flag(variables.NAME), 'workspace was created at', flag(pkgDir))
 }
