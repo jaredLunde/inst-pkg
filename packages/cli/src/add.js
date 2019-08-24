@@ -203,23 +203,23 @@ export default async function add ({name, template, cwd, ...args}) {
     path.join(templatePath, 'lib'),
     variables.PKG_DIR,
     {
-      include: templatePkg.include && (filename => templatePkg.include(filename, variables)),
-      exclude: templatePkg.exclude && (filename => templatePkg.exclude(filename, variables)),
+      include: templatePkg.include && (filename => templatePkg.include(filename, variables, args)),
+      exclude: templatePkg.exclude && (filename => templatePkg.exclude(filename, variables, args)),
     }
   )
-  await findReplace(variables.PKG_DIR, variables)
+  await findReplace(variables.PKG_DIR, variables, args)
   spinner.succeed(flag('Rendered templates'))
 
   // renames files if there is a rename function in the template
   spinner.start(`Renaming files in ${flag(variables.PKG_DIR)}`)
   if (templatePkg.rename) {
-    await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables))
+    await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables, args))
   }
   spinner.succeed(flag('Renamed files'))
 
   // allows the template to edit the package.json, e.g. add scripts
   if (templatePkg.editPackageJson) {
-    pkgJson = await templatePkg.editPackageJson({...pkgJson}, variables)
+    pkgJson = await templatePkg.editPackageJson({...pkgJson}, variables, args)
 
     if (!pkgJson || Object.keys(pkgJson).length === 0) {
       log(
@@ -238,7 +238,7 @@ export default async function add ({name, template, cwd, ...args}) {
     )
   }
   // initiates a git repo if not a workspace
-  if (!rootPkgJson) {
+  if (!rootPkgJson && !args.g && !args.gitless) {
     // we do git first beccause some deps may depend on it
     await cmd.get(`
       cd ${variables.PKG_DIR}
@@ -248,11 +248,20 @@ export default async function add ({name, template, cwd, ...args}) {
     `)
   }
   // installs the template package dependencies
-  await installDeps(variables.PKG_DIR, templatePkg)
+  await installDeps(variables.PKG_DIR, templatePkg, variables, args)
   await cmd.get(`
      cd ${variables.PKG_DIR}
      yarn remove ${templateName}
   `)
+  // commits deps if not a workspace
+  if (!rootPkgJson && !args.g && !args.gitless) {
+    // we do git first beccause some deps may depend on it
+    await cmd.get(`
+      cd ${variables.PKG_DIR}
+      git add .
+      git commit -m "Installed package dependencies"
+    `)
+  }
   // donezo
   success(
     flag(variables.PKG_NAME),

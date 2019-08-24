@@ -8,10 +8,21 @@ function formatDeps (deps) {
 
 export default async function installDeps (
   pkgDir,
-  {dependencies, devDependencies, peerDependencies}
+  {dependencies, devDependencies, peerDependencies},
+  variables,
+  args
 ) {
   const spinner = ora({spinner: 'point'}).start(`${flag('Installing dependencies')} ${pkgDir}`)
   let data
+  peerDependencies = typeof peerDependencies === 'function'
+    ? peerDependencies(variables, args)
+    : peerDependencies
+  dependencies = typeof dependencies === 'function'
+    ? dependencies(variables, args)
+    : dependencies
+  devDependencies = typeof devDependencies === 'function'
+    ? devDependencies(variables, args)
+    : devDependencies
 
   try {
     data = await cmd.get(`

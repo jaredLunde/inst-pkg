@@ -60,18 +60,18 @@ module.exports.peerDependencies = {
 
 // filter for only including template files that return \`true\` here
 // NOTE: this function is never called if \`exclude\` is defined
-module.exports.include = function include (filename, variables /*from prompts() above*/) {
+module.exports.include = function include (filename, variables, args) {
   return true
 }
 
 // filter for excluding template files that return true here
 // NOTE: this function takes precedence over include() above
-// module.exports.exclude = function exclude (filename, variables /*from prompts() above*/) {
+// module.exports.exclude = function exclude (filename, variables, args) {
 //   return false
 // }
 
 // filter for renaming files
-module.exports.rename = function rename (filename, variables /*from prompts() above*/) {
+module.exports.rename = function rename (filename, variables, args) {
   return filename
 }
 
@@ -81,13 +81,19 @@ module.exports.rename = function rename (filename, variables /*from prompts() ab
 // this function must return a valid package.json object
 module.exports.editPackageJson = function editPackageJson (
   packageJson, 
-  variables /*from prompts() above*/
+  variables, /*from prompts() above*/
+  args
 ) {
   packageJson.scripts = {}
   
   // this function must return a valid package.json object
   return packageJson
 }
+`.trim()
+
+const BIN = `
+const {bin} = require('@inst-pkg/template-utils')
+bin(__dirname, process.argv)
 `.trim()
 
 function handleExit (tplDir) {
@@ -181,6 +187,9 @@ export default async function template ({templateName}) {
   // gets the package.json contents
   const pkgJson = getPkgJson(variables.TPL_DIR)
   pkgJson.name = variables.TPL_NAME
+  pkgJson.bin = {
+    [pkgJson.name]: 'bin/index.js'
+  }
   delete pkgJson.__path
   // writes the new package.json file
   await writeFile(
@@ -192,6 +201,8 @@ export default async function template ({templateName}) {
   await writeFile(path.join(variables.TPL_DIR, 'index.js'), BLANK_TEMPLATE)
   // writes the lib folder
   await mkdir(path.join(variables.TPL_DIR, 'lib'))
+  await mkdir(path.join(variables.TPL_DIR, 'bin'))
+  await writeFile(path.join(variables.TPL_DIR, 'index.js'), BIN)
   // donezo
   success(flag(variables.TPL_NAME), 'template was created at', flag(variables.TPL_DIR))
 
