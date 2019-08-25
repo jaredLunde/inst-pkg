@@ -9,7 +9,7 @@ import {
   getPkgJson,
   getPkgFilename,
   flag,
-} from '@inst-pkg/template-utils'
+} from '@inst-cli/template-utils'
 import {promptDefaults, mkdir, writeFile} from './utils'
 
 

@@ -1,9 +1,9 @@
-# inst-pkg
+# inst-cli
 A workspace manager integrated with Yarn for quickly constructing workspaces from boilerplates
 using a basic template engine and integrated CLI prompts.
 
 ### Installation
-`yarn global add @inst-pkg/cli`
+`yarn global add inst-cli`
 
 --------------------------------------------------------------------------------
 ```bash
@@ -15,7 +15,7 @@ inst add @stellar-apps/serverless-react-app
 ```
 --------------------------------------------------------------------------------
 
-## `@inst-pkg/cli`
+## `inst-cli`
 ### `inst init [workspace]`
 Creates a new Inst+Yarn workspace at the `path.join(process.env.CWD, workspace)`. The
 workspace comes with a script called `inst` and you're encourage to use `yarn inst` 

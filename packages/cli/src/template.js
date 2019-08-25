@@ -8,7 +8,7 @@ import {
   success,
   flag,
   getPkgJson
-} from '@inst-pkg/template-utils'
+} from '@inst-cli/template-utils'
 import fs from 'fs'
 import ora from 'ora'
 import path from 'path'
@@ -30,7 +30,7 @@ const README = `
 `.trim()
 
 const BLANK_TEMPLATE = `
-const {flag, required, trim} = require('@inst-pkg/template-utils')
+const {flag, required, trim} = require('@inst-cli/template-utils')
 
 module.exports = {}
 
@@ -92,7 +92,7 @@ module.exports.editPackageJson = function editPackageJson (
 `.trim()
 
 const BIN = `
-const {bin} = require('@inst-pkg/template-utils')
+const {bin} = require('@inst-cli/template-utils')
 bin(__dirname, process.argv)
 `.trim()
 
@@ -181,7 +181,7 @@ export default async function template ({templateName}) {
   await cmd.get(`
     cd ${variables.TPL_DIR}
     yarn init -y
-    yarn add @inst-pkg/template-utils
+    yarn add @inst-cli/template-utils
   `)
   spinner.stop(flag('Installed dependencies'))
   // gets the package.json contents
@@ -190,6 +190,11 @@ export default async function template ({templateName}) {
   pkgJson.bin = {
     [pkgJson.name]: 'bin/index.js'
   }
+  pkgJson.files = [
+    'lib',
+    'bin',
+    'index.js'
+  ]
   delete pkgJson.__path
   // writes the new package.json file
   await writeFile(
@@ -202,7 +207,7 @@ export default async function template ({templateName}) {
   // writes the lib folder
   await mkdir(path.join(variables.TPL_DIR, 'lib'))
   await mkdir(path.join(variables.TPL_DIR, 'bin'))
-  await writeFile(path.join(variables.TPL_DIR, 'index.js'), BIN)
+  await writeFile(path.join(variables.TPL_DIR, 'bin', 'index.js'), BIN)
   // donezo
   success(flag(variables.TPL_NAME), 'template was created at', flag(variables.TPL_DIR))
 

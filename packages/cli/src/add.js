@@ -16,7 +16,7 @@ import {
   success,
   getPkgJson,
   getRootPkgJson
-} from '@inst-pkg/template-utils'
+} from '@inst-cli/template-utils'
 import {
   addWorkspace,
   removeWorkspaceSync,

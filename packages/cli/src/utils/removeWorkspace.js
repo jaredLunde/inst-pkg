@@ -1,4 +1,4 @@
-import {getRootPkg} from '@inst-pkg/template-utils'
+import {getRootPkg} from '@inst-cli/template-utils'
 import path from 'path'
 import writeFile, {writeFileSync} from './writeFile'
 

@@ -4,7 +4,7 @@ import {log} from './log'
 
 export default (dirname, argv) => {
   const cmd = [
-    `@inst-pkg/cli`,
+    `inst-cli`,
     `add`,
     `file:${path.join(dirname, '../')}`,
     ...argv.slice(2),

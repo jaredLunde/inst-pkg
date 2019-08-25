@@ -1,6 +1,6 @@
 {
-  "name": "@inst-pkg/template-utils",
-  "version": "1.0.12",
+  "name": "@inst-cli/template-utils",
+  "version": "1.0.0",
   "main": "dist/cjs/index.js",
   "scripts": {
     "clean": "rimraf ./dist/cjs",

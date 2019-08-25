@@ -758,15 +758,15 @@
     babel-plugin-macros "^2.4.3"
     cross-env "^5.2.0"
 
-"@inst-pkg/basic-template@^1.0.0":
+"@inst-cli/basic-template@^1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@inst-pkg/basic-template/-/basic-template-1.0.0.tgz#9f812c7f799917043f2ba27b771e512cf00b631c"
-  integrity sha512-YkYksAa4S5b7zNOzxak29UTmxj+t6Q3lOICVdybq3ZreDapckFWQBUeN8TbkYMSULAFaz0U1TBp3nr5HmmePzw==
+  resolved "https://registry.yarnpkg.com/@inst-cli/basic-template/-/basic-template-1.0.0.tgz#780db985d13bf58dd111285222e7afd726b413c6"
+  integrity sha512-tut73uGyBfOjtIEukmaK3UPutgwYEd1viOGbiU2I3YylOkQbtd/UX6qSvErqynjZX61JoOSRWwar49k17ECwqg==
 
-"@inst-pkg/template-utils@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@inst-pkg/template-utils/-/template-utils-1.0.11.tgz#6a5b08c6b63f59f1fc03ef4deaf67db8351d2629"
-  integrity sha512-pUpAAbJQSyS+Ek2BoXNuuv6dCXRc3rJzXKdDZirJBnTqFFHW3zKwMNc2FtQM3Lc9OOzg5AVGCl/lu2EUW5vJhA==
+"@inst-cli/template-utils@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@inst-cli/template-utils/-/template-utils-1.0.0.tgz#2fffc61523dd55616d97a58ac530d640efa6b8fb"
+  integrity sha512-xc+nhkdjRTsX3tdLvR9EsTsAQ/C17E0DnCuPv5+8wmwvXZnh+E5G/kufoxGaDtIcVSXkO/6+9FaEmWpsJUCJQA==
   dependencies:
     chalk "^2.4.1"
     find-package-json "^1.1.0"

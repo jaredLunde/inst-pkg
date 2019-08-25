@@ -1,4 +1,4 @@
-import {flag, cmd} from '@inst-pkg/template-utils'
+import {flag, cmd} from '@inst-cli/template-utils'
 import ora from 'ora'
 
 
