@@ -1,4 +1,3 @@
-import {flag, log} from '@inst-cli/template-utils'
 import fs from 'fs-extra'
 import ncp from 'ncp'
 import path from 'path'

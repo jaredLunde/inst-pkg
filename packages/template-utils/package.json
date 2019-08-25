@@ -1,7 +1,10 @@
 {
   "name": "@inst-cli/template-utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/cjs/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rimraf ./dist/cjs",
     "build": "yarn clean && cross-env NODE_ENV=production BABEL_ENV=production babel src --out-dir dist/cjs && npm run prettier \"dist/cjs/**/*.js\"",

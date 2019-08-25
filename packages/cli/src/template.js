@@ -92,8 +92,8 @@ module.exports.editPackageJson = function editPackageJson (
 `.trim()
 
 const BIN = `
-const {bin} = require('@inst-cli/template-utils')
-bin(__dirname, process.argv)
+#!/usr/bin/env node
+require('@inst-cli/template-utils').bin(__dirname, process.argv)
 `.trim()
 
 function handleExit (tplDir) {

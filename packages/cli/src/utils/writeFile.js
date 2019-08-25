@@ -1,6 +1,5 @@
 import {flag, log} from '@inst-cli/template-utils'
 import fs from 'fs-extra'
-import path from 'path'
 
 
 export default function writeFile (fn, data, opt = {}) {

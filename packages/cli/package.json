@@ -1,11 +1,14 @@
 {
   "name": "inst-cli",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Instantly create web and native applications for React with Serverless SSR out of the box",
   "main": "dist/cjs/index.js",
   "bin": {
     "inst": "dist/cjs/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "edit": "atom ./",
     "clean": "rimraf ./dist/cjs",
@@ -24,7 +27,7 @@
   },
   "dependencies": {
     "@inst-cli/basic-template": "^1.0.0",
-    "@inst-cli/template-utils": "^1.0.0",
+    "@inst-cli/template-utils": "^1.0.1",
     "@yarnpkg/lockfile": "^1.1.0",
     "chalk": "^2.4.1",
     "fs-extra": "^7.0.0",

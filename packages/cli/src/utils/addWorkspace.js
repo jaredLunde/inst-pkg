@@ -1,4 +1,4 @@
-import {flag, log, getRootPkg} from '@inst-cli/template-utils'
+import {getRootPkg} from '@inst-cli/template-utils'
 import path from 'path'
 import writeFile from './writeFile'
 
