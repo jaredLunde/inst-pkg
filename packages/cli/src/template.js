@@ -96,6 +96,25 @@ const BIN = `
 require('@inst-cli/template-utils').bin(__dirname, process.argv)
 `.trim()
 
+const GITIGNORE = `
+node_modules
+coverage
+`.trim()
+
+const PRETTIER = `
+{
+  "trailingComma": "es5",
+  "tabWidth": 2,
+  "semi": false,
+  "singleQuote": true,
+  "bracketSpacing": false
+}
+`.trim()
+
+const PRETTIERIGNORE = `
+**/*.inst.**
+`.trim()
+
 function handleExit (tplDir) {
   let EXITING = false
 
@@ -182,6 +201,7 @@ export default async function template ({templateName}) {
     cd ${variables.TPL_DIR}
     yarn init -y
     yarn add @inst-cli/template-utils
+    yarn add --dev prettier
   `)
   spinner.stop(flag('Installed dependencies'))
   // gets the package.json contents
@@ -191,10 +211,16 @@ export default async function template ({templateName}) {
     [pkgJson.name]: 'bin/index.js'
   }
   pkgJson.files = [
-    'lib',
-    'bin',
+    '/lib',
+    '/bin',
     'index.js'
   ]
+  pkgJson.scripts = {
+    "format": "npm run format:src && npm run format:lib",
+    "format:src": "prettier --write ./index.js",
+    "format:lib": "prettier --write \"./lib/**/*.{js,jsx,ts,tsx,css,scss,less,yml,md}\"",
+    "prepublishOnly": "npm run format"
+  }
   delete pkgJson.__path
   // writes the new package.json file
   await writeFile(
@@ -202,12 +228,15 @@ export default async function template ({templateName}) {
     JSON.stringify(pkgJson, null, 2)
   )
   // writes the default files
+  await writeFile(path.join(variables.TPL_DIR, '.gitignore'), GITIGNORE)
   await writeFile(path.join(variables.TPL_DIR, 'README.md'), README)
   await writeFile(path.join(variables.TPL_DIR, 'index.js'), BLANK_TEMPLATE)
   // writes the lib folder
   await mkdir(path.join(variables.TPL_DIR, 'lib'))
   await mkdir(path.join(variables.TPL_DIR, 'bin'))
   await writeFile(path.join(variables.TPL_DIR, 'bin', 'index.js'), BIN)
+  await writeFile(path.join(variables.TPL_DIR, '.prettierrc'), PRETTIER)
+  await writeFile(path.join(variables.TPL_DIR, '.prettierignore'), PRETTIERIGNORE)
   // donezo
   success(flag(variables.TPL_NAME), 'template was created at', flag(variables.TPL_DIR))
 

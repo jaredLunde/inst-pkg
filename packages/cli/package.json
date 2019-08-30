@@ -1,6 +1,6 @@
 {
   "name": "inst-cli",
-  "version": "1.0.4",
+  "version": "1.0.10",
   "description": "Instantly create web and native applications for React with Serverless SSR out of the box",
   "main": "dist/cjs/index.js",
   "bin": {

@@ -21,11 +21,11 @@ export default async function findReplace (dir, variables) {
 
             data = data.toString()
             const nextData =
-              f.path.includes('.inst') && render(data.toString(), variables)
+              f.path.includes('.inst.') && render(data.toString(), variables)
 
             if (nextData && nextData !== data) {
               fs.unlink(f.path)
-              await writeFile(f.path.replace('.inst', ''), nextData)
+              await writeFile(f.path.replace('.inst.', ''), nextData)
               resolve(nextData)
             }
             else {

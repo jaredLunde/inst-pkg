@@ -1,4 +1,3 @@
-import {flag, log} from '@inst-pkg/template-utils'
 import fs from 'fs-extra'
 
 
