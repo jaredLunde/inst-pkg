@@ -6,7 +6,7 @@ import walk from './walk'
 
 export default async function findReplace(dir, variables, ignore = []) {
   let files = walk(dir, {nodir: true})
-  ignore = multimatch(files, ignore, {dot: true})
+  ignore = multimatch(files, ignore, {dot: true, nodir: true})
   files = files.filter(f => !ignore.includes(f))
 
   for (let f of files) {
