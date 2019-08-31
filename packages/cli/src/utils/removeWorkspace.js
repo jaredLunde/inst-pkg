@@ -9,10 +9,7 @@ export default function removeWorkspace(pkg) {
   const pkgName = path.basename(pkg)
 
   if (rootPkgJSONData.workspaces.includes(relPkgPath)) {
-    rootPkgJSONData.workspaces.splice(
-      rootPkgJSONData.workspaces.indexOf(relPkgPath),
-      1
-    )
+    rootPkgJSONData.workspaces.splice(rootPkgJSONData.workspaces.indexOf(relPkgPath), 1)
   }
 
   if (rootPkgJSONData.scripts[pkgName] !== void 0) {
@@ -20,10 +17,7 @@ export default function removeWorkspace(pkg) {
   }
 
   delete rootPkgJSONData.__path
-  return writeFile(
-    rootPkgJSON.filename,
-    JSON.stringify(rootPkgJSONData, null, 2)
-  )
+  return writeFile(rootPkgJSON.filename, JSON.stringify(rootPkgJSONData, null, 2))
 }
 
 export function removeWorkspaceSync(pkg) {
@@ -33,10 +27,7 @@ export function removeWorkspaceSync(pkg) {
   const pkgName = path.basename(pkg)
 
   if (rootPkgJSONData.workspaces.includes(relPkgPath)) {
-    rootPkgJSONData.workspaces.splice(
-      rootPkgJSONData.workspaces.indexOf(relPkgPath),
-      1
-    )
+    rootPkgJSONData.workspaces.splice(rootPkgJSONData.workspaces.indexOf(relPkgPath), 1)
   }
 
   if (rootPkgJSONData.scripts[pkgName] !== void 0) {
@@ -44,8 +35,5 @@ export function removeWorkspaceSync(pkg) {
   }
 
   delete rootPkgJSONData.__path
-  return writeFileSync(
-    rootPkgJSON.filename,
-    JSON.stringify(rootPkgJSONData, null, 2)
-  )
+  return writeFileSync(rootPkgJSON.filename, JSON.stringify(rootPkgJSONData, null, 2))
 }

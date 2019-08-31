@@ -21,8 +21,7 @@ export default async function rename(path, renameFn) {
       nofile: true,
       depthLimit: -1,
       filter: ({path}) =>
-        path.match(/\/node_modules$/) === null &&
-        path.match(/\/node_modules\//) === null,
+        path.match(/\/node_modules$/) === null && path.match(/\/node_modules\//) === null,
     }).map(({path}) => {
       if (fs.existsSync(path)) {
         return fsRename(path, renameFn(path))

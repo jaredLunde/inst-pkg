@@ -25,8 +25,7 @@ export default memoize((pkgDir, templateName) => {
   } else {
     pkgName = pkgName.split('@')
     pkgName = (pkgName.length > 2 ? pkgName.slice(0, -1) : pkgName).join('@')
-    pkgName =
-      pkgName.startsWith('@') === false ? pkgName.split('@')[0] : pkgName
+    pkgName = pkgName.startsWith('@') === false ? pkgName.split('@')[0] : pkgName
   }
 
   return pkgName

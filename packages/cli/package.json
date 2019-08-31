@@ -1,6 +1,6 @@
 {
   "name": "inst-cli",
-  "version": "1.0.11",
+  "version": "1.0.13",
   "description": "Instantly create web and native applications for React with Serverless SSR out of the box",
   "main": "dist/index.js",
   "author": "Jared Lunde",
@@ -36,6 +36,7 @@
     "klaw-sync": "^4.0.0",
     "memoize-two-args": "^1.0.7",
     "minimatch": "^3.0.4",
+    "multimatch": "^4.0.0",
     "ncp": "^2.0.0",
     "ora": "^3.0.0",
     "rimraf": "^2.6.2",

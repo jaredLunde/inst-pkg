@@ -22,14 +22,9 @@ export default function addWorkspace(pkg) {
 
     return false
   } else {
-    rootPkgJSONData.scripts[
-      pkgName
-    ] = `INIT_CWD=${relPkgPath} yarn --cwd=${relPkgPath}`
+    rootPkgJSONData.scripts[pkgName] = `INIT_CWD=${relPkgPath} yarn --cwd=${relPkgPath}`
   }
 
   delete rootPkgJSONData.__path
-  return writeFile(
-    rootPkgJSON.filename,
-    JSON.stringify(rootPkgJSONData, null, 2)
-  )
+  return writeFile(rootPkgJSON.filename, JSON.stringify(rootPkgJSONData, null, 2))
 }

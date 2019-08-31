@@ -20,7 +20,7 @@ dist/
 .idea
 `.trim()
 
-export default async function init({projectName}) {
+export default async function workspace({projectName}) {
   const basename = path.basename(pwd())
   let variables = {NAME: projectName}
   // prompts the user for a package name if none is defined

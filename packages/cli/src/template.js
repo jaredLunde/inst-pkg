@@ -94,8 +94,8 @@ coverage
 `.trim()
 
 const INSTIGNORE = `
-**!(.inst.)**
-`
+**/!(*.inst.)*
+`.trim()
 
 const PRETTIER = `
 {
@@ -188,14 +188,13 @@ export default async function template({templateName}) {
       error('package already exists', flag(variables.TPL_DIR))
       return
     }
+
     await mkdirs(variables.TPL_DIR)
   }
   // starts handling bad exit codes
   handleExit(variables.TPL_DIR)
   // installs template utils
-  const spinner = ora({spinner: 'point'}).start(
-    `${flag('Installing dependencies')}`
-  )
+  const spinner = ora({spinner: 'point'}).start(`${flag('Installing dependencies')}`)
   await cmd.get(`
     cd ${variables.TPL_DIR}
     yarn init -y
@@ -213,8 +212,7 @@ export default async function template({templateName}) {
   pkgJson.scripts = {
     format: 'npm run format:src && npm run format:lib',
     'format:src': 'prettier --write ./index.js',
-    'format:lib':
-      'prettier --write "./lib/**/*.{js,jsx,ts,tsx,css,scss,less,yml,md}"',
+    'format:lib': 'prettier --write "./lib/**/*.{js,jsx,ts,tsx,css,scss,less,yml,md}"',
     prepublishOnly: 'npm run format',
   }
   delete pkgJson.__path
@@ -233,16 +231,9 @@ export default async function template({templateName}) {
   await mkdir(path.join(variables.TPL_DIR, 'bin'))
   await writeFile(path.join(variables.TPL_DIR, 'bin', 'index.js'), BIN)
   await writeFile(path.join(variables.TPL_DIR, '.prettierrc'), PRETTIER)
-  await writeFile(
-    path.join(variables.TPL_DIR, '.prettierignore'),
-    PRETTIERIGNORE
-  )
+  await writeFile(path.join(variables.TPL_DIR, '.prettierignore'), PRETTIERIGNORE)
   // donezo
-  success(
-    flag(variables.TPL_NAME),
-    'template was created at',
-    flag(variables.TPL_DIR)
-  )
+  success(flag(variables.TPL_NAME), 'template was created at', flag(variables.TPL_DIR))
 
   FINISHED = true
 }

@@ -144,9 +144,7 @@ export default async function add({name, template, cwd, ...args}) {
   }
 
   // installs the template
-  let spinner = ora({spinner: 'point'}).start(
-    `Installing template ${flag(template)}`
-  )
+  let spinner = ora({spinner: 'point'}).start(`Installing template ${flag(template)}`)
   await cmd.get(`
     cd ${variables.PKG_DIR}
     yarn init -y
@@ -219,15 +217,21 @@ export default async function add({name, template, cwd, ...args}) {
     include,
     exclude,
   })
-  await findReplace(variables.PKG_DIR, variables, args)
+
+  const instignorePath = path.join(templatePath, '.instignore')
+  let instignore
+
+  if (fs.existsSync(instignorePath)) {
+    instignore = (await fs.promises.readFile(instignorePath, 'utf8')).split('\n')
+  }
+
+  await findReplace(variables.PKG_DIR, variables, args, instignore)
   spinner.succeed(flag('Rendered templates'))
 
   // renames files if there is a rename function in the template
   spinner.start(`Renaming files in ${flag(variables.PKG_DIR)}`)
   if (templatePkg.rename) {
-    await rename(variables.PKG_DIR, filename =>
-      templatePkg.rename(filename, variables, args)
-    )
+    await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables, args))
   }
   spinner.succeed(flag('Renamed files'))
 
@@ -268,7 +272,7 @@ export default async function add({name, template, cwd, ...args}) {
      yarn remove ${templateName}
   `)
   // commits deps if not a workspace
-  if (!rootPkgJson && !args.g && !args.gitless) {
+  if (!rootPkgJson && !args.ng && !args.gitless) {
     // we do git first beccause some deps may depend on it
     await cmd.get(`
       cd ${variables.PKG_DIR}

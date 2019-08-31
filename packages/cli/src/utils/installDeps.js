@@ -13,22 +13,16 @@ export default async function installDeps(
   variables,
   args
 ) {
-  const spinner = ora({spinner: 'point'}).start(
-    `${flag('Installing dependencies')} ${pkgDir}`
-  )
+  const spinner = ora({spinner: 'point'}).start(`${flag('Installing dependencies')} ${pkgDir}`)
   let data
   peerDependencies =
     typeof peerDependencies === 'function'
       ? peerDependencies(variables, args)
       : peerDependencies
   dependencies =
-    typeof dependencies === 'function'
-      ? dependencies(variables, args)
-      : dependencies
+    typeof dependencies === 'function' ? dependencies(variables, args) : dependencies
   devDependencies =
-    typeof devDependencies === 'function'
-      ? devDependencies(variables, args)
-      : devDependencies
+    typeof devDependencies === 'function' ? devDependencies(variables, args) : devDependencies
 
   try {
     data = await cmd.get(`

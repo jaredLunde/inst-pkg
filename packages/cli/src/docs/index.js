@@ -1,3 +1,3 @@
 export add from './add'
-export init from './init'
+export workspace from './workspace'
 export template from './template'
