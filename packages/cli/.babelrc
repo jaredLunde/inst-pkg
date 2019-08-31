@@ -1,14 +1,14 @@
 {
   "presets": [
     [
-      "@inst-app/esx", {
-      "env": {
-        "targets": {
-          "node": "10"
+      "@lunde/es",
+      {
+        "env": {
+          "targets": {
+            "node": "10"
+          }
         }
-      },
-      "runtime": false
-    }
+      }
     ]
   ]
 }

@@ -1,8 +1,7 @@
 import {flag, log, getRootPkg} from '@inst-cli/template-utils'
 import path from 'path'
 
-
-export default function findWorkspace (name) {
+export default function findWorkspace(name) {
   const rootPkgJSON = getRootPkg()
   const rootPkgJSONData = rootPkgJSON.value
 

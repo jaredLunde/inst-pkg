@@ -1,9 +1,8 @@
 import memoize from 'memoize-two-args'
-import path from "path"
-import fs from "fs"
+import path from 'path'
+import fs from 'fs'
 import {getRootPkgFilename} from '@inst-cli/template-utils'
 import findTemplateName from './findTemplateName'
-
 
 export default memoize((pkgDir, templateName) => {
   const pkgName = findTemplateName(pkgDir, templateName)
@@ -11,8 +10,7 @@ export default memoize((pkgDir, templateName) => {
 
   if (fs.existsSync(pkgNodeModules)) {
     return pkgNodeModules
-  }
-  else {
+  } else {
     const rootPkgFilename = getRootPkgFilename(pkgDir)
     return path.join(path.dirname(rootPkgFilename), 'node_modules', pkgName)
   }

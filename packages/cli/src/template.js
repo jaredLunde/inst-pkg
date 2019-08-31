@@ -7,13 +7,13 @@ import {
   error,
   success,
   flag,
-  getPkgJson
+  getPkgJson,
 } from '@inst-cli/template-utils'
 import fs from 'fs'
 import ora from 'ora'
 import path from 'path'
 import inquirer from 'inquirer'
-import {mkdir, mkdirs, writeFile, promptDefaults, removeWorkspaceSync} from './utils'
+import {mkdir, mkdirs, writeFile, promptDefaults} from './utils'
 import rimraf from 'rimraf'
 
 let FINISHED = false
@@ -34,12 +34,12 @@ const {flag, required, trim} = require('@inst-cli/template-utils')
 
 module.exports = {}
 
-// creates template variables using Inquirer.js
+// Creates template variables using Inquirer.js
 // see https://github.com/SBoudrias/Inquirer.js#objects for prompt object examples
 module.exports.prompts = (
-  {ROOT_NAME, ROOT_DIR, PKG_NAME, PKG_DIR}, // default template variables 
+  {ROOT_NAME, ROOT_DIR, PKG_NAME, PKG_DIR}, // current template variables 
+  args,                                     // the arguments passed to the CLI as parsed by yargs
   packageJson,                              // contents of the package.json file as a plain object
-  args,                                     // the arguments passed to the CLI
   inquirer                                  // the inquirer prompt object
 ) => ([
   // See https://github.com/SBoudrias/Inquirer.js#objects
@@ -47,43 +47,35 @@ module.exports.prompts = (
 ])
 
 // package.json dependencies
-module.exports.dependencies = {
-}
+module.exports.dependencies = (variables, args) => ({})
 
 // package.json dev dependencies
-module.exports.devDependencies = {
-}
+module.exports.devDependencies = (variables, args) => ({})
 
 // package.json peer dependencies
-module.exports.peerDependencies = {
-}
+module.exports.peerDependencies = (variables, args) => ({})
 
-// filter for only including template files that return \`true\` here
-// NOTE: this function is never called if \`exclude\` is defined
-module.exports.include = function include (filename, variables, args) {
-  return true
-}
+// Copy some files on your own
+// module.exports.copy = (variables, args) => copy()
 
-// filter for excluding template files that return true here
-// NOTE: this function takes precedence over include() above
-// module.exports.exclude = function exclude (filename, variables, args) {
-//   return false
-// }
+// Include specific template files based on glob patterns 
+module.exports.include = (variables, args) => ['*']
 
-// filter for renaming files
-module.exports.rename = function rename (filename, variables, args) {
-  return filename
-}
+// This will exclude patterns from the include statements above
+// module.exports.exclude = (variables, args) => ['**.exclude_me.**']
+
+// filter for renaming files once they've landed in their new home
+module.exports.rename = (filename, variables, args) => filename
 
 // runs after the package.json is created and deps are installed,
 // used for adding scripts and whatnot
 //
 // this function must return a valid package.json object
-module.exports.editPackageJson = function editPackageJson (
-  packageJson, 
-  variables, /*from prompts() above*/
+module.exports.editPackageJson = (
+  packageJson, // the current package.json file as a plain JS object
+  variables,
   args
-) {
+) => {
   packageJson.scripts = {}
   
   // this function must return a valid package.json object
@@ -101,12 +93,17 @@ node_modules
 coverage
 `.trim()
 
+const INSTIGNORE = `
+**!(.inst.)**
+`
+
 const PRETTIER = `
 {
   "trailingComma": "es5",
   "tabWidth": 2,
   "semi": false,
   "singleQuote": true,
+  "jsxSingleQuote": true,
   "bracketSpacing": false
 }
 `.trim()
@@ -115,16 +112,16 @@ const PRETTIERIGNORE = `
 **/*.inst.**
 `.trim()
 
-function handleExit (tplDir) {
+function handleExit(tplDir) {
   let EXITING = false
 
-  function clean () {
+  function clean() {
     const spinner = ora({spinner: 'point'}).start('Cleaning up')
     rimraf.sync(tplDir)
     spinner.succeed(flag('Cleaned up'))
   }
 
-  function intHandler (...args) {
+  function intHandler(...args) {
     if (EXITING === true) {
       return
     }
@@ -136,7 +133,7 @@ function handleExit (tplDir) {
     process.exit(1)
   }
 
-  function exitHandler (code) {
+  function exitHandler(code) {
     if (EXITING === true || FINISHED === true) {
       return
     }
@@ -146,8 +143,7 @@ function handleExit (tplDir) {
 
     if (code != 0) {
       error('inst failed to create your template')
-    }
-    else {
+    } else {
       log(flag('See ya'))
     }
   }
@@ -165,25 +161,26 @@ function handleExit (tplDir) {
   process.on('uncaughtException', intHandler)
 }
 
-export default async function template ({templateName}) {
+export default async function template({templateName}) {
   const basename = path.basename(pwd())
   let variables = {TPL_NAME: templateName}
   // prompts the user for a package name if none is defined
   if (!templateName) {
-    variables = await inquirer.prompt([{
-      ...promptDefaults,
-      name: 'TPL_NAME',
-      message: 'Project name:',
-      default: basename,
-      filter: trim,
-      validate: required
-    }])
+    variables = await inquirer.prompt([
+      {
+        ...promptDefaults,
+        name: 'TPL_NAME',
+        message: 'Project name:',
+        default: basename,
+        filter: trim,
+        validate: required,
+      },
+    ])
   }
   // sets the package directory
   if (!templateName && variables.TPL_NAME === basename) {
     variables.TPL_DIR = pwd()
-  }
-  else {
+  } else {
     variables.TPL_DIR = path.join(pwd(), variables.TPL_NAME)
     // make directory if it doesn't exist, otherwise exit
     if (fs.existsSync(variables.TPL_DIR)) {
@@ -196,7 +193,9 @@ export default async function template ({templateName}) {
   // starts handling bad exit codes
   handleExit(variables.TPL_DIR)
   // installs template utils
-  const spinner = ora({spinner: 'point'}).start(`${flag('Installing dependencies')}`)
+  const spinner = ora({spinner: 'point'}).start(
+    `${flag('Installing dependencies')}`
+  )
   await cmd.get(`
     cd ${variables.TPL_DIR}
     yarn init -y
@@ -208,18 +207,15 @@ export default async function template ({templateName}) {
   const pkgJson = getPkgJson(variables.TPL_DIR)
   pkgJson.name = variables.TPL_NAME
   pkgJson.bin = {
-    [pkgJson.name]: 'bin/index.js'
+    [pkgJson.name]: 'bin/index.js',
   }
-  pkgJson.files = [
-    '/lib',
-    '/bin',
-    'index.js'
-  ]
+  pkgJson.files = ['/lib', '/bin', 'index.js']
   pkgJson.scripts = {
-    "format": "npm run format:src && npm run format:lib",
-    "format:src": "prettier --write ./index.js",
-    "format:lib": "prettier --write \"./lib/**/*.{js,jsx,ts,tsx,css,scss,less,yml,md}\"",
-    "prepublishOnly": "npm run format"
+    format: 'npm run format:src && npm run format:lib',
+    'format:src': 'prettier --write ./index.js',
+    'format:lib':
+      'prettier --write "./lib/**/*.{js,jsx,ts,tsx,css,scss,less,yml,md}"',
+    prepublishOnly: 'npm run format',
   }
   delete pkgJson.__path
   // writes the new package.json file
@@ -229,6 +225,7 @@ export default async function template ({templateName}) {
   )
   // writes the default files
   await writeFile(path.join(variables.TPL_DIR, '.gitignore'), GITIGNORE)
+  await writeFile(path.join(variables.TPL_DIR, '.instignore'), INSTIGNORE)
   await writeFile(path.join(variables.TPL_DIR, 'README.md'), README)
   await writeFile(path.join(variables.TPL_DIR, 'index.js'), BLANK_TEMPLATE)
   // writes the lib folder
@@ -236,9 +233,16 @@ export default async function template ({templateName}) {
   await mkdir(path.join(variables.TPL_DIR, 'bin'))
   await writeFile(path.join(variables.TPL_DIR, 'bin', 'index.js'), BIN)
   await writeFile(path.join(variables.TPL_DIR, '.prettierrc'), PRETTIER)
-  await writeFile(path.join(variables.TPL_DIR, '.prettierignore'), PRETTIERIGNORE)
+  await writeFile(
+    path.join(variables.TPL_DIR, '.prettierignore'),
+    PRETTIERIGNORE
+  )
   // donezo
-  success(flag(variables.TPL_NAME), 'template was created at', flag(variables.TPL_DIR))
+  success(
+    flag(variables.TPL_NAME),
+    'template was created at',
+    flag(variables.TPL_DIR)
+  )
 
   FINISHED = true
 }

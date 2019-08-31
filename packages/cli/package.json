@@ -1,29 +1,28 @@
 {
   "name": "inst-cli",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Instantly create web and native applications for React with Serverless SSR out of the box",
-  "main": "dist/cjs/index.js",
+  "main": "dist/index.js",
+  "author": "Jared Lunde",
+  "license": "MIT",
   "bin": {
-    "inst": "dist/cjs/index.js"
+    "inst": "dist/index.js"
   },
   "files": [
     "dist"
   ],
-  "scripts": {
-    "edit": "atom ./",
-    "clean": "rimraf ./dist/cjs",
-    "build": "yarn clean && cross-env NODE_ENV=production BABEL_ENV=production babel src --out-dir dist/cjs && npm run prettier \"dist/cjs/**/*.js\"",
-    "prettier": "prettier --single-quote --no-semi --no-bracket-spacing --trailing-comma es5 --write",
-    "cli": "node dist/cjs/index.js",
-    "prepublishOnly": "yarn build"
-  },
-  "repository": "https://github.com/jaredLunde/inst-pkg",
-  "author": "Jared Lunde",
-  "license": "MIT",
-  "private": false,
   "devDependencies": {
-    "@inst-app/babel-preset-esx": "^1.0.2",
-    "prettier": "^1.14.2"
+    "@lunde/babel-preset-es": "^1.0.1",
+    "babel-eslint": "^10.0.3",
+    "cross-env": "^5.2.0",
+    "eslint": "^6.3.0",
+    "eslint-import-resolver-jest": "^3.0.0",
+    "eslint-plugin-jest": "^22.16.0",
+    "husky": "^3.0.4",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.2.5",
+    "prettier": "^1.18.2",
+    "pretty-quick": "^1.11.1"
   },
   "dependencies": {
     "@inst-cli/basic-template": "^1.0.0",
@@ -31,13 +30,44 @@
     "@yarnpkg/lockfile": "^1.1.0",
     "chalk": "^2.4.1",
     "fs-extra": "^7.0.0",
+    "glob": "^7.1.4",
     "import-from": "^2.1.0",
     "inquirer": "^6.1.0",
     "klaw-sync": "^4.0.0",
     "memoize-two-args": "^1.0.7",
+    "minimatch": "^3.0.4",
     "ncp": "^2.0.0",
     "ora": "^3.0.0",
     "rimraf": "^2.6.2",
     "yargs": "^12.0.5"
+  },
+  "scripts": {
+    "build": "babel src -d dist -x .js --ignore \"**/*.test.js\",\"**/test.js\" --delete-dir-on-start",
+    "format": "npm run format:cjs && npm run format:src",
+    "format:cjs": "prettier --write \"dist/**/*.js\"",
+    "format:src": "prettier --write \"src/**/*.js\"",
+    "lint": "eslint src",
+    "prepublishOnly": "npm run lint && npm run test && npm run build && npm run format",
+    "test": "jest --passWithNoTests",
+    "validate": "npm run lint && npm run test -- --coverage"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "eslint",
+      "pretty-quick --staged"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "homepage": "https://github.com/jaredLunde/inst-pkg/tree/master/cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaredLunde/inst-pkg.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jaredLunde/inst-pkg/issues"
   }
 }

@@ -15,7 +15,7 @@ import {
   line,
   success,
   getPkgJson,
-  getRootPkgJson
+  getRootPkgJson,
 } from '@inst-cli/template-utils'
 import {
   addWorkspace,
@@ -28,23 +28,22 @@ import {
   findTemplateName,
   findTemplatePath,
   installDeps,
-  writeFile
+  writeFile,
 } from './utils'
-
 
 let FINISHED = false
 
-function handleExit (pkgDir) {
+function handleExit(pkgDir) {
   let EXITING = false
 
-  function clean () {
+  function clean() {
     const spinner = ora({spinner: 'point'}).start('Cleaning up')
     rimraf.sync(pkgDir)
     removeWorkspaceSync(pkgDir)
     spinner.succeed(flag('Cleaned up'))
   }
 
-  function intHandler (...args) {
+  function intHandler(...args) {
     if (EXITING === true) {
       return
     }
@@ -56,7 +55,7 @@ function handleExit (pkgDir) {
     process.exit(1)
   }
 
-  function exitHandler (code) {
+  function exitHandler(code) {
     if (EXITING === true || FINISHED === true) {
       return
     }
@@ -66,8 +65,7 @@ function handleExit (pkgDir) {
 
     if (code != 0) {
       error('inst failed to install your template')
-    }
-    else {
+    } else {
       log(flag('See ya'))
     }
   }
@@ -85,7 +83,7 @@ function handleExit (pkgDir) {
   process.on('uncaughtException', intHandler)
 }
 
-export default async function add ({name, template, cwd, ...args}) {
+export default async function add({name, template, cwd, ...args}) {
   if (!template) {
     template = name
     name = void 0
@@ -97,29 +95,31 @@ export default async function add ({name, template, cwd, ...args}) {
   let variables = {
     PKG_NAME: name,
     ROOT_NAME: rootPkgJson ? name : null,
-    ROOT_DIR: rootPkgJson ? path.dirname(rootPkgJson.__path) : null
+    ROOT_DIR: rootPkgJson ? path.dirname(rootPkgJson.__path) : null,
   }
 
   // if there wasn't a name provided, prompt for one
   if (name === void 0) {
     variables = {
       ...variables,
-      ...(
-        await inquirer.prompt([
-          {
-            ...promptDefaults,
-            name: 'PKG_NAME',
-            message: 'Package name:',
-            filter: trim,
-            validate: required
-          }
-        ])
-      )
+      ...(await inquirer.prompt([
+        {
+          ...promptDefaults,
+          name: 'PKG_NAME',
+          message: 'Package name:',
+          filter: trim,
+          validate: required,
+        },
+      ])),
     }
   }
 
   // helps spot early errors in CLI configs
-  log(`Creating new${variables.ROOT_NAME ? ' workspace' : ''} package ${flag(variables.PKG_NAME)} using template ${flag(template)}`)
+  log(
+    `Creating new${variables.ROOT_NAME ? ' workspace' : ''} package ${flag(
+      variables.PKG_NAME
+    )} using template ${flag(template)}`
+  )
   variables.PKG_DIR = path.join(PWD, variables.PKG_NAME)
 
   // make directory if it doesn't exist, otherwise exit
@@ -144,7 +144,9 @@ export default async function add ({name, template, cwd, ...args}) {
   }
 
   // installs the template
-  let spinner = ora({spinner: 'point'}).start(`Installing template ${flag(template)}`)
+  let spinner = ora({spinner: 'point'}).start(
+    `Installing template ${flag(template)}`
+  )
   await cmd.get(`
     cd ${variables.PKG_DIR}
     yarn init -y
@@ -168,7 +170,7 @@ export default async function add ({name, template, cwd, ...args}) {
   if (templatePkg.getDefaultVariables) {
     variables = {
       ...variables,
-      ...(await templatePkg.getDefaultVariables(variables, pkgJson, args))
+      ...(await templatePkg.getDefaultVariables(variables, pkgJson, args)),
     }
   }
 
@@ -176,13 +178,10 @@ export default async function add ({name, template, cwd, ...args}) {
   if (templatePkg.prompts) {
     console.log(line())
 
-    const prompts = (
-      typeof templatePkg.prompts === 'function'
-        ? templatePkg.prompts(variables, pkgJson, args, inquirer)
-        : templatePkg.prompts
-    ).map(
-      p => ({...promptDefaults, ...p})
-    )
+    const prompts = (typeof templatePkg.prompts === 'function'
+      ? templatePkg.prompts(variables, args, pkgJson, inquirer)
+      : templatePkg.prompts
+    ).map(p => ({...promptDefaults, ...p}))
 
     variables = {...variables, ...(await inquirer.prompt(prompts))}
 
@@ -199,21 +198,36 @@ export default async function add ({name, template, cwd, ...args}) {
   }
 
   // copy the package's lib to the package directory
-  await copy(
-    path.join(templatePath, 'lib'),
-    variables.PKG_DIR,
-    {
-      include: templatePkg.include && (filename => templatePkg.include(filename, variables, args)),
-      exclude: templatePkg.exclude && (filename => templatePkg.exclude(filename, variables, args)),
-    }
-  )
+  let include = ['*'],
+    exclude
+  if (templatePkg.include) {
+    include =
+      typeof templatePkg === 'function'
+        ? templatePkg.include(variables, args)
+        : templatePkg.include
+    include = include && !Array.isArray(include) ? [include] : include
+  }
+
+  if (templatePkg.exclude) {
+    exclude =
+      typeof templatePkg === 'function'
+        ? templatePkg.exclude(variables, args)
+        : templatePkg.exclude
+  }
+
+  await copy(path.join(templatePath, 'lib'), variables.PKG_DIR, {
+    include,
+    exclude,
+  })
   await findReplace(variables.PKG_DIR, variables, args)
   spinner.succeed(flag('Rendered templates'))
 
   // renames files if there is a rename function in the template
   spinner.start(`Renaming files in ${flag(variables.PKG_DIR)}`)
   if (templatePkg.rename) {
-    await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables, args))
+    await rename(variables.PKG_DIR, filename =>
+      templatePkg.rename(filename, variables, args)
+    )
   }
   spinner.succeed(flag('Renamed files'))
 
@@ -244,7 +258,7 @@ export default async function add ({name, template, cwd, ...args}) {
       cd ${variables.PKG_DIR}
       git init
       git add .
-      git commit -m "Installed package template: \"${templateName}\""
+      git commit -m "Installed package from template: \\"${templateName}\\""
     `)
   }
   // installs the template package dependencies

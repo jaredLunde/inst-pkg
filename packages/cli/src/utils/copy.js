@@ -1,44 +1,41 @@
 import fs from 'fs-extra'
-import ncp from 'ncp'
+import glob_ from 'glob'
 import path from 'path'
 import mkdirs from './mkdirs'
 
+const glob = (cwd, pattern, ignore) =>
+  new Promise((resolve, reject) =>
+    glob_(
+      pattern,
+      {
+        dot: true,
+        absolute: true,
+        cwd,
+        ignore,
+      },
+      (err, files) => {
+        if (err) reject(err)
+        resolve(files)
+      }
+    )
+  )
 
-ncp.limit = 16
-
-export default async function copy (from, to, {include, exclude}) {
+export default async (from, to, {include, exclude}) => {
   const dir = path.dirname(to)
 
   if (fs.existsSync(dir) === false) {
     await mkdirs(dir)
   }
 
-  return new Promise(
-    (resolve, reject) => ncp(
-      from,
-      to,
-      {
-        filter: (source) => {
-          if (typeof exclude === 'function') {
-            return exclude(source) === false
-          }
+  const files = new Set()
 
-          if (typeof include === 'function') {
-            return include(source)
-          }
+  for (let pattern of include) {
+    for (let file of await glob(from, pattern, exclude)) {
+      files.add(file)
+    }
+  }
 
-          return true
-        }
-      },
-      err => {
-        if (err) {
-          reject(err)
-          throw new Error(err)
-        }
-
-        // log(flag('copy'), from, to)
-        resolve()
-      }
-    )
-  )
+  for (let file of files) {
+    await fs.copy(file, path.join(to, path.relative(from, file)))
+  }
 }

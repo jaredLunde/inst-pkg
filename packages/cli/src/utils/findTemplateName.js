@@ -1,8 +1,7 @@
 import memoize from 'memoize-two-args'
 import {getPkgJson, getRootPkgFilename} from '@inst-cli/template-utils'
 import * as lockfile from '@yarnpkg/lockfile'
-import fs from "fs"
-
+import fs from 'fs'
 
 export default memoize((pkgDir, templateName) => {
   let pkgName = templateName
@@ -20,15 +19,14 @@ export default memoize((pkgDir, templateName) => {
         break
       }
     }
-  }
-  else if (templateName.startsWith('file:')) {
+  } else if (templateName.startsWith('file:')) {
     // local package
     pkgName = getPkgJson(templateName.replace(/^file:/, '')).name
-  }
-  else {
+  } else {
     pkgName = pkgName.split('@')
     pkgName = (pkgName.length > 2 ? pkgName.slice(0, -1) : pkgName).join('@')
-    pkgName = pkgName.startsWith('@') === false ? pkgName.split('@')[0] : pkgName
+    pkgName =
+      pkgName.startsWith('@') === false ? pkgName.split('@')[0] : pkgName
   }
 
   return pkgName
