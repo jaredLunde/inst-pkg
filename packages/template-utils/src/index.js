@@ -1,4 +1,3 @@
-import chalk from 'chalk'
 import findPkgJSON from 'find-package-json'
 
 export * from './log'
@@ -9,7 +8,7 @@ export const pwd = () => process.env.PWD || process.cwd()
 export const trim = s => s.trim()
 export const required = s => !!s
 
-export function getRootPkg (dir = pwd()) {
+export function getRootPkg(dir = pwd()) {
   const finder = findPkgJSON(dir)
   let pkgJSON = finder.next()
 

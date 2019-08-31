@@ -59,13 +59,13 @@ module.exports.peerDependencies = (variables, args) => ({})
 // module.exports.copy = (variables, args) => copy()
 
 // Include specific template files based on glob patterns 
-module.exports.include = (variables, args) => ['*']
+module.exports.include = (variables, args) => ['**']
 
 // This will exclude patterns from the include statements above
 // module.exports.exclude = (variables, args) => ['**.exclude_me.**']
 
 // filter for renaming files once they've landed in their new home
-module.exports.rename = (filename, variables, args) => filename
+module.exports.rename = (filename, variables, args) => filename.replace('.inst.', '.')
 
 // runs after the package.json is created and deps are installed,
 // used for adding scripts and whatnot
@@ -109,7 +109,7 @@ const PRETTIER = `
 `.trim()
 
 const PRETTIERIGNORE = `
-**/*.inst.**
+**/*.inst.*
 `.trim()
 
 function handleExit(tplDir) {

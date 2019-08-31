@@ -1,6 +1,6 @@
 {
   "name": "inst-cli",
-  "version": "1.0.13",
+  "version": "1.0.26",
   "description": "Instantly create web and native applications for React with Serverless SSR out of the box",
   "main": "dist/index.js",
   "author": "Jared Lunde",
@@ -63,12 +63,12 @@
       "pre-commit": "lint-staged"
     }
   },
-  "homepage": "https://github.com/jaredLunde/inst-pkg/tree/master/cli#readme",
+  "homepage": "https://github.com/jaredLunde/inst-cli/tree/master/cli#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jaredLunde/inst-pkg.git"
+    "url": "https://github.com/jaredLunde/inst-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/jaredLunde/inst-pkg/issues"
+    "url": "https://github.com/jaredLunde/inst-cli/issues"
   }
 }

@@ -1,6 +1,5 @@
 import chalk from 'chalk'
 
-
 export const log = (...msgs) => console.log('⚘', ...msgs)
 export const error = (...msgs) => log(flag('Error', 'red'), ...msgs)
 export const success = (...msgs) => console.log(flag('⚘', 'green'), ...msgs)

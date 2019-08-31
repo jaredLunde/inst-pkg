@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import yargs from 'yargs'
 import {log, flag} from '@inst-cli/template-utils'
-import {version} from '../../package.json'
+import {version} from '../package.json'
 import * as docs from './docs'
 import workspace from './workspace'
 import add from './add'

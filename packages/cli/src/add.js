@@ -38,9 +38,14 @@ function handleExit(pkgDir) {
 
   function clean() {
     const spinner = ora({spinner: 'point'}).start('Cleaning up')
-    rimraf.sync(pkgDir)
-    removeWorkspaceSync(pkgDir)
-    spinner.succeed(flag('Cleaned up'))
+    try {
+      rimraf.sync(pkgDir)
+      removeWorkspaceSync(pkgDir)
+    } catch (err) {
+      // eslint-disable-next-line no-empty
+    } finally {
+      spinner.succeed(flag('Cleaned up'))
+    }
   }
 
   function intHandler(...args) {
@@ -190,50 +195,50 @@ export default async function add({name, template, cwd, ...args}) {
   // copies the template to the package directory and renders it
   spinner.start(`Rendering templates for ${flag(templateName)}`)
 
-  // if the package has its own copy function use that first
-  if (templatePkg.copy) {
-    await templatePkg.copy(variables, args)
+  try {
+    // if the package has its own copy function use that first
+    if (templatePkg.copy) {
+      await templatePkg.copy(variables, args)
+    }
+
+    // copy the package's lib to the package directory
+    let include, exclude
+    if (templatePkg.include) {
+      include =
+        typeof templatePkg.include === 'function'
+          ? templatePkg.include(variables, args)
+          : templatePkg.include
+      include = include && !Array.isArray(include) ? [include] : include
+    }
+
+    if (templatePkg.exclude) {
+      exclude =
+        typeof templatePkg.exclude === 'function'
+          ? templatePkg.exclude(variables, args)
+          : templatePkg.exclude
+    }
+
+    await copy(path.join(templatePath, 'lib'), variables.PKG_DIR, {include, exclude})
+    const instignorePath = path.join(templatePath, '.instignore')
+    let instignore
+
+    if (fs.existsSync(instignorePath)) {
+      instignore = (await fs.promises.readFile(instignorePath, 'utf8')).split('\n')
+    }
+
+    await findReplace(variables.PKG_DIR, variables, instignore)
+    spinner.succeed(flag('Rendered templates'))
+
+    // renames files if there is a rename function in the template
+    spinner.start(`Renaming files in ${flag(variables.PKG_DIR)}`)
+    if (templatePkg.rename) {
+      await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables, args))
+    }
+    spinner.succeed(flag('Renamed files'))
+  } catch (err) {
+    console.log(err)
+    process.exit(1)
   }
-
-  // copy the package's lib to the package directory
-  let include = ['*'],
-    exclude
-  if (templatePkg.include) {
-    include =
-      typeof templatePkg === 'function'
-        ? templatePkg.include(variables, args)
-        : templatePkg.include
-    include = include && !Array.isArray(include) ? [include] : include
-  }
-
-  if (templatePkg.exclude) {
-    exclude =
-      typeof templatePkg === 'function'
-        ? templatePkg.exclude(variables, args)
-        : templatePkg.exclude
-  }
-
-  await copy(path.join(templatePath, 'lib'), variables.PKG_DIR, {
-    include,
-    exclude,
-  })
-
-  const instignorePath = path.join(templatePath, '.instignore')
-  let instignore
-
-  if (fs.existsSync(instignorePath)) {
-    instignore = (await fs.promises.readFile(instignorePath, 'utf8')).split('\n')
-  }
-
-  await findReplace(variables.PKG_DIR, variables, args, instignore)
-  spinner.succeed(flag('Rendered templates'))
-
-  // renames files if there is a rename function in the template
-  spinner.start(`Renaming files in ${flag(variables.PKG_DIR)}`)
-  if (templatePkg.rename) {
-    await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables, args))
-  }
-  spinner.succeed(flag('Renamed files'))
 
   // allows the template to edit the package.json, e.g. add scripts
   if (templatePkg.editPackageJson) {

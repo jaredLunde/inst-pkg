@@ -15,7 +15,7 @@ export default async function findReplace(dir, variables, ignore = []) {
 
     if (nextData && nextData !== data) {
       fs.unlink(f.path)
-      await writeFile(f.path.replace('.inst.', ''), nextData)
+      await writeFile(f.path, nextData)
     }
   }
 }

@@ -3,24 +3,21 @@ import glob_ from 'glob'
 import path from 'path'
 import mkdirs from './mkdirs'
 
+const globOpt = {
+  dot: true,
+  absolute: true,
+  nodir: true,
+}
+
 const glob = (cwd, pattern, ignore) =>
   new Promise((resolve, reject) =>
-    glob_(
-      pattern,
-      {
-        dot: true,
-        absolute: true,
-        cwd,
-        ignore,
-      },
-      (err, files) => {
-        if (err) reject(err)
-        resolve(files)
-      }
-    )
+    glob_(pattern, Object.assign({}, globOpt, {cwd}, ignore ? {ignore} : {}), (err, files) => {
+      if (err) reject(err)
+      resolve(files)
+    })
   )
 
-export default async (from, to, {include, exclude}) => {
+export default async (from, to, {include = ['**'], exclude}) => {
   const dir = path.dirname(to)
 
   if (fs.existsSync(dir) === false) {
