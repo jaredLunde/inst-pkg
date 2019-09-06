@@ -1,16 +1,11 @@
-import chalk from 'chalk'
 import yargs from 'yargs'
 import {log, flag} from '@inst-cli/template-utils'
-import {version} from '../package.json'
 import * as docs from './docs'
 import workspace from './workspace'
 import add from './add'
 import template from './template'
 
-const instBanner = `${flag('inst', 'grey')} ${chalk.grey(`v${version}`)} `
-
 export default async function bin() {
-  log(instBanner)
   // parses the arguments w/ yargs
   yargs.scriptName('inst')
 
@@ -76,6 +71,4 @@ export default async function bin() {
         'See --help for a list of commands.'
       )
   }
-
-  log(chalk.grey('❋❋ done ❋❋'))
 }

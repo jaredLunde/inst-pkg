@@ -1,11 +1,8 @@
 import {cmd} from '@inst-cli/template-utils'
 import ora from 'ora'
-import chalk from 'chalk'
 
 export default async function installDeps(pkgDir) {
-  const spinner = ora({spinner: 'dots3', color: 'gray'}).start(
-    `Installing dependencies ${chalk.gray(pkgDir)}`
-  )
+  const spinner = ora({spinner: 'dots3', color: 'gray'}).start(`Installing dependencies`)
   let data
 
   try {

@@ -900,10 +900,10 @@
   resolved "https://registry.yarnpkg.com/@inst-cli/basic-template/-/basic-template-1.0.0.tgz#780db985d13bf58dd111285222e7afd726b413c6"
   integrity sha512-tut73uGyBfOjtIEukmaK3UPutgwYEd1viOGbiU2I3YylOkQbtd/UX6qSvErqynjZX61JoOSRWwar49k17ECwqg==
 
-"@inst-cli/template-utils@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@inst-cli/template-utils/-/template-utils-1.0.1.tgz#da7a185d510ae047abfb22985fcd28b73f7fba46"
-  integrity sha512-pOXGfQ27XCP5Wmq8Z18iIDqbWMIEcEXTCk0rFbjy5qP51uXCgyF3Dm253o2C1HiXnhGoIUwMVnUI9aKsnqmqeQ==
+"@inst-cli/template-utils@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@inst-cli/template-utils/-/template-utils-1.0.7.tgz#805221561c1944b388a9981ebf8ad575d35af81c"
+  integrity sha512-2NVkQrE3jiBeQSNFvzjMYkRk8RJPqXmRZRof8hYyMThrzfOIEEL3sWHDMfqGaxtqgnS3sAALq8ZplzW7Y3YA+A==
   dependencies:
     chalk "^2.4.1"
     find-package-json "^1.1.0"

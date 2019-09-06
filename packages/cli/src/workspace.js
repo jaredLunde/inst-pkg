@@ -75,5 +75,5 @@ export default async function workspace({projectName}) {
     git commit -m "Created workspace"
   `)
   // donezo
-  success(flag(variables.NAME), 'workspace was created at', flag(pkgDir))
+  success(flag(variables.NAME), 'workspace was created in', `./${flag(pkgDir)}`)
 }

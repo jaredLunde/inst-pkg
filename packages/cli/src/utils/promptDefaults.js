@@ -1,1 +1,1 @@
-export default {prefix: '⚘'}
+export default {prefix: '>'}

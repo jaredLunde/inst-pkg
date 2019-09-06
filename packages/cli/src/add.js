@@ -12,7 +12,6 @@ import {
   log,
   error,
   flag,
-  line,
   success,
   getPkgJson,
   getRootPkgJson,
@@ -123,7 +122,7 @@ export default async function add({name, template, cwd, ...args}) {
   log(
     `Creating new${variables.ROOT_NAME ? ' workspace' : ''} package ${flag(
       variables.PKG_NAME
-    )} using template ${flag(template)}`
+    )} with template ${flag(template)}`
   )
   variables.PKG_DIR = path.join(PWD, variables.PKG_NAME)
 
@@ -187,12 +186,10 @@ export default async function add({name, template, cwd, ...args}) {
     ).map(p => ({...promptDefaults, ...p}))
 
     variables = {...variables, ...(await inquirer.prompt(prompts))}
-
-    console.log(line())
   }
 
   // copies the template to the package directory and renders it
-  spinner.start(`Rendering templates for ${flag(templateName)}`)
+  spinner.start(`Rendering templates`)
 
   try {
     // if the package has its own copy function use that first
@@ -229,7 +226,7 @@ export default async function add({name, template, cwd, ...args}) {
     spinner.stop()
 
     // renames files if there is a rename function in the template
-    spinner.start(`Renaming files in ${flag(variables.PKG_DIR)}`)
+    spinner.start(`Renaming files`)
     if (templatePkg.rename) {
       await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables, args))
     }
@@ -306,8 +303,8 @@ export default async function add({name, template, cwd, ...args}) {
   // donezo
   success(
     flag(variables.PKG_NAME),
-    'was created at',
-    flag(path.relative(process.cwd(), variables.PKG_DIR))
+    'was created in',
+    `./${flag(path.relative(process.cwd(), variables.PKG_DIR))}`
   )
 
   FINISHED = true
