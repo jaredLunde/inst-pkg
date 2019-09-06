@@ -157,7 +157,7 @@ export default async function add({name, template, cwd, ...args}) {
     yarn init -y
     yarn add ${template} --dev
   `)
-  spinner.succeed(flag('Installed template'))
+  spinner.stop()
 
   // gets the newly created package.json values as JS object
   let pkgJson = getPkgJson(variables.PKG_DIR)
@@ -226,14 +226,14 @@ export default async function add({name, template, cwd, ...args}) {
     }
 
     await findReplace(variables.PKG_DIR, variables, instignore)
-    spinner.succeed(flag('Rendered templates'))
+    spinner.stop()
 
     // renames files if there is a rename function in the template
     spinner.start(`Renaming files in ${flag(variables.PKG_DIR)}`)
     if (templatePkg.rename) {
       await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables, args))
     }
-    spinner.succeed(flag('Renamed files'))
+    spinner.stop()
   } catch (err) {
     console.log(err)
     process.exit(1)

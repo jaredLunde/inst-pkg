@@ -1,9 +1,10 @@
-import {flag, cmd} from '@inst-cli/template-utils'
+import {cmd} from '@inst-cli/template-utils'
 import ora from 'ora'
+import chalk from 'chalk'
 
 export default async function installDeps(pkgDir) {
   const spinner = ora({spinner: 'dots3', color: 'gray'}).start(
-    `${flag('Installing dependencies')} ${pkgDir}`
+    `Installing dependencies ${chalk.gray(pkgDir)}`
   )
   let data
 
@@ -13,9 +14,9 @@ export default async function installDeps(pkgDir) {
        yarn install
     `)
 
-    spinner.succeed(flag('Installed dependencies'))
+    spinner.stop()
   } catch (err) {
-    spinner.error(flag('Experienced error installing dependencies'))
+    spinner.error('Experienced error installing dependencies')
     console.log(err)
     throw err
   }
