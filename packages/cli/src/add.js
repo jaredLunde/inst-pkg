@@ -37,7 +37,7 @@ function handleExit(pkgDir) {
   let EXITING = false
 
   function clean() {
-    const spinner = ora({spinner: 'point'}).start('Cleaning up')
+    const spinner = ora({spinner: 'dots3', color: 'gray'}).start('Cleaning up')
     try {
       rimraf.sync(pkgDir)
       removeWorkspaceSync(pkgDir)
@@ -149,7 +149,9 @@ export default async function add({name, template, cwd, ...args}) {
   }
 
   // installs the template
-  let spinner = ora({spinner: 'point'}).start(`Installing template ${flag(template)}`)
+  let spinner = ora({spinner: 'dots3', color: 'gray'}).start(
+    `Installing template ${flag(template)}`
+  )
   await cmd.get(`
     cd ${variables.PKG_DIR}
     yarn init -y
@@ -179,8 +181,6 @@ export default async function add({name, template, cwd, ...args}) {
 
   // prompts template for new variables
   if (templatePkg.prompts) {
-    console.log(line())
-
     const prompts = (typeof templatePkg.prompts === 'function'
       ? templatePkg.prompts(variables, args, pkgJson, inquirer)
       : templatePkg.prompts
@@ -190,7 +190,6 @@ export default async function add({name, template, cwd, ...args}) {
 
     console.log(line())
   }
-  log(flag('Template variables'), `\n${JSON.stringify(variables, null, 2)}`)
 
   // copies the template to the package directory and renders it
   spinner.start(`Rendering templates for ${flag(templateName)}`)
@@ -253,13 +252,28 @@ export default async function add({name, template, cwd, ...args}) {
       )
       process.exit(1)
     }
-
-    delete pkgJson.__path
-    await writeFile(
-      path.join(variables.PKG_DIR, 'package.json'),
-      JSON.stringify(pkgJson, null, 2)
-    )
   }
+  // adds dependencies to package.json
+  pkgJson.dependencies =
+    typeof templatePkg.dependencies === 'function'
+      ? templatePkg.dependencies(variables, args)
+      : templatePkg.dependencies
+  pkgJson.devDependencies = {
+    ...pkgJson.devDependencies,
+    ...(typeof templatePkg.devDependencies === 'function'
+      ? templatePkg.devDependencies(variables, args)
+      : templatePkg.devDependencies),
+  }
+  pkgJson.peerDependencies =
+    typeof templatePkg.peerDependencies === 'function'
+      ? templatePkg.peerDependencies(variables, args)
+      : templatePkg.peerDependencies
+  // writes the package.json file
+  delete pkgJson.__path
+  await writeFile(
+    path.join(variables.PKG_DIR, 'package.json'),
+    JSON.stringify(pkgJson, null, 2)
+  )
   // initiates a git repo if not a workspace
   if (!rootPkgJson && !args.g && !args.gitless) {
     // we do git first beccause some deps may depend on it
@@ -271,11 +285,15 @@ export default async function add({name, template, cwd, ...args}) {
     `)
   }
   // installs the template package dependencies
-  await installDeps(variables.PKG_DIR, templatePkg, variables, args)
+  await installDeps(variables.PKG_DIR)
+
+  spinner.start('Cleaning up template packages from node_modules')
   await cmd.get(`
      cd ${variables.PKG_DIR}
      yarn remove ${templateName}
   `)
+  spinner.stop()
+
   // commits deps if not a workspace
   if (!rootPkgJson && !args.ng && !args.gitless) {
     // we do git first beccause some deps may depend on it

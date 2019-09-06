@@ -116,7 +116,7 @@ function handleExit(tplDir) {
   let EXITING = false
 
   function clean() {
-    const spinner = ora({spinner: 'point'}).start('Cleaning up')
+    const spinner = ora({spinner: 'dots3', color: 'gray'}).start('Cleaning up')
     rimraf.sync(tplDir)
     spinner.succeed(flag('Cleaned up'))
   }
@@ -194,7 +194,9 @@ export default async function template({templateName}) {
   // starts handling bad exit codes
   handleExit(variables.TPL_DIR)
   // installs template utils
-  const spinner = ora({spinner: 'point'}).start(`${flag('Installing dependencies')}`)
+  const spinner = ora({spinner: 'dots3', color: 'gray'}).start(
+    `${flag('Installing dependencies')}`
+  )
   await cmd.get(`
     cd ${variables.TPL_DIR}
     yarn init -y
