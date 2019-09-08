@@ -228,7 +228,11 @@ export default async function add({name, template, cwd, ...args}) {
     // renames files if there is a rename function in the template
     spinner.start(`Renaming files`)
     if (templatePkg.rename) {
-      await rename(variables.PKG_DIR, filename => templatePkg.rename(filename, variables, args))
+      await rename(
+        variables.PKG_DIR,
+        filename => templatePkg.rename(filename, variables, args),
+        {include, exclude}
+      )
     }
     spinner.stop()
   } catch (err) {

@@ -1,7 +1,7 @@
 import fs from 'fs'
 import p from 'path'
-import walkSync from 'klaw-sync'
 import {promisify} from 'util'
+import glob from './glob'
 import mkdirs from './mkdirs'
 
 const fsRename = promisify(fs.rename)
@@ -16,22 +16,30 @@ const cleanEmptyDirs = async directory => {
   }
 }
 
-export default async (path, renameFn) => {
-  const removedPaths = []
+export default async (path, renameFn, {include = ['**'], exclude}) => {
+  if (Array.isArray(exclude)) {
+    exclude.push('node_modules')
+  } else if (exclude) {
+    exclude = [exclude, 'node_modules']
+  } else {
+    exclude = ['node_modules']
+  }
 
-  await Promise.all(
-    walkSync(path, {
-      depthLimit: -1,
-      filter: ({path}) => path.includes('/node_modules/') === false,
-    }).map(async ({path, stats}) => {
-      if (stats.isDirectory() === false && fs.existsSync(path)) {
-        const next = renameFn(path)
-        removedPaths.push(p.dirname(path))
-        await mkdirs(p.dirname(next))
-        return fsRename(path, next)
-      }
-    })
-  )
+  const removedPaths = []
+  const files = []
+
+  for (let pattern of include) {
+    for (let file of await glob(path, pattern, exclude)) {
+      files.push(file)
+    }
+  }
+
+  for (let file of files) {
+    const next = renameFn(file)
+    removedPaths.push(p.dirname(file))
+    await mkdirs(p.dirname(next))
+    await fsRename(file, next)
+  }
 
   removedPaths.map(cleanEmptyDirs)
 }
