@@ -95,6 +95,7 @@ coverage
 
 const INSTIGNORE = `
 **/!(*.inst.)*
+**/node_modules/**
 `.trim()
 
 const PRETTIER = `
