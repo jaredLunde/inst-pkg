@@ -211,7 +211,7 @@ export default async function template({templateName}) {
   pkgJson.bin = {
     [pkgJson.name]: 'bin/index.js',
   }
-  pkgJson.files = ['/lib', '/bin', 'index.js']
+  pkgJson.files = ['/lib', '/bin', 'index.js', '.instignore']
   pkgJson.scripts = {
     format: 'npm run format:src && npm run format:lib',
     'format:src': 'prettier --write ./index.js',
