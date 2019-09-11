@@ -1,11 +1,15 @@
 import fs from 'fs-extra'
 import multimatch from 'multimatch'
 import writeFile from './writeFile'
-import render from './render'
+import renderDefault from './render'
 import walk from './walk'
 
-export default async function findReplace(dir, variables, ignore = []) {
-  let files = walk(dir, {nodir: true})
+export default async function findReplace(
+  dir,
+  variables,
+  {render = renderDefault, ignore = []}
+) {
+  let files = walk(dir, {nodir: true, ignore: f => f.path.match(/\/node_modules\//)})
   ignore = multimatch(files.map(file => file.path), ignore, {dot: true, nodir: true})
   files = files.filter(f => !ignore.includes(f.path))
 

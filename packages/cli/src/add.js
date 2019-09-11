@@ -222,7 +222,10 @@ export default async function add({name, template, cwd, ...args}) {
       instignore = (await fs.promises.readFile(instignorePath, 'utf8')).split('\n')
     }
 
-    await findReplace(variables.PKG_DIR, variables, instignore)
+    await findReplace(variables.PKG_DIR, variables, {
+      render: templatePkg.render,
+      ignore: instignore,
+    })
     spinner.stop()
 
     // renames files if there is a rename function in the template
