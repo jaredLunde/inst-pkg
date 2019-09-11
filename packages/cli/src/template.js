@@ -81,6 +81,9 @@ module.exports.editPackageJson = (
   // this function must return a valid package.json object
   return packageJson
 }
+
+// Use your own template renderer
+// module.exports.render = (string, variables) => handlebars(string, variables)
 `.trim()
 
 const BIN = `
