@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`conditional custom: 0 1`] = `
+"
+    
+      bar
+    
+  "
+`;
+
+exports[`conditional custom: 1 1`] = `
+"
+    
+      1
+    
+  "
+`;
+
+exports[`conditional negation: baz 1`] = `
+"
+    
+      baz
+    
+  "
+`;
+
+exports[`conditional negation: false 1`] = `
+"
+    
+  "
+`;
+
+exports[`conditional negation: null 1`] = `
+"
+    
+  "
+`;
+
+exports[`conditional negation: undefined 1`] = `
+"
+    
+  "
+`;
+
+exports[`conditional not: baz 1`] = `
+"
+    
+      baz
+    
+  "
+`;
+
+exports[`conditional not: false 1`] = `
+"
+    
+      bar
+    
+  "
+`;
+
+exports[`conditional not: null 1`] = `
+"
+    
+      foo
+    
+  "
+`;
+
+exports[`conditional not: undefined 1`] = `
+"
+    
+      bar
+    
+  "
+`;
+
+exports[`scripting: 1 1`] = `
+"
+    bara
+b
+c
+d
+
+  "
+`;
+
+exports[`scripting: null 1`] = `
+"
+    a
+b
+c
+d
+
+  "
+`;
+
+exports[`throws compilation error 1`] = `
+"[@inst-cli/template] Error parsing template:
+
+    <:if foo:>
+      <:foo:>
+    <:fi>
+  "
+`;
+
+exports[`variables 1`] = `
+"
+    fish
+    fosh
+  "
+`;
