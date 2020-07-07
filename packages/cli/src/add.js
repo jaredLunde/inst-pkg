@@ -285,7 +285,7 @@ export default async function add({name, template, cwd, ...args}) {
       cd ${variables.PKG_DIR}
       git init
       git add .
-      git commit -m "Installed package from template: \\"${templateName}\\""
+      git commit -m "chore: create package from template: \\"${templateName}\\"" --no-verify
     `)
   }
   // installs the template package dependencies
