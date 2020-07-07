@@ -174,7 +174,7 @@ export default async function add({name, template, cwd, ...args}) {
   if (templatePkg.getDefaultVariables) {
     variables = {
       ...variables,
-      ...(await templatePkg.getDefaultVariables(variables, pkgJson, args)),
+      ...(await templatePkg.getDefaultVariables(variables, args, pkgJson)),
     }
   }
 
