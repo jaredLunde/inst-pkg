@@ -92,7 +92,6 @@ export default async function add({name, template, cwd, ...args}) {
     template = name
     name = void 0
   }
-
   // inits the variables object which will be passed to the template installer
   const PWD = cwd ? path.join(pwd(), cwd) : pwd()
   const rootPkgJson = getRootPkgJson(PWD)
@@ -279,7 +278,7 @@ export default async function add({name, template, cwd, ...args}) {
     JSON.stringify(pkgJson, null, 2)
   )
   // initiates a git repo if not a workspace
-  if (!rootPkgJson && !args.g && !args.gitless) {
+  if (!rootPkgJson && !args.git) {
     // we do git first beccause some deps may depend on it
     await cmd.get(`
       cd ${variables.PKG_DIR}
@@ -299,7 +298,7 @@ export default async function add({name, template, cwd, ...args}) {
   spinner.stop()
 
   // commits deps if not a workspace
-  if (!rootPkgJson && !args.ng && !args.gitless) {
+  if (!rootPkgJson && !args.git) {
     // we do git first beccause some deps may depend on it
     await cmd.get(`
       cd ${variables.PKG_DIR}
