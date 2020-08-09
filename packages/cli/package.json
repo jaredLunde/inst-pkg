@@ -1,6 +1,6 @@
 {
   "name": "inst-cli",
-  "version": "1.0.64",
+  "version": "1.0.65",
   "description": "Instantly create web and native applications for React with Serverless SSR out of the box",
   "main": "dist/index.js",
   "author": "Jared Lunde",

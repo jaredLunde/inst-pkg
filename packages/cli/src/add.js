@@ -304,7 +304,7 @@ export default async function add({name, template, cwd, ...args}) {
     await cmd.get(`
       cd ${variables.PKG_DIR}
       git add .
-      git commit -m "chore: install dependencies"
+      git commit -m "chore: install dependencies" --no-verify
     `)
   }
   // donezo
